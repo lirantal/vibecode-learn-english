@@ -7,6 +7,17 @@ import { loadProgress, setLastSelectedGroupId } from "./lib/storage";
 
 const data = wordGroupsData.groups;
 
+function ScoreBadge({ label, score, total }: { label: string; score: number; total: number }) {
+  const pct = total > 0 ? score / total : 0;
+  const level = pct >= 0.8 ? "great" : pct >= 0.5 ? "ok" : "weak";
+  return (
+    <span className={`score-badge score-badge--${level}`}>
+      <span className="score-badge__label">{label}</span>
+      <span className="score-badge__value">{score}/{total}</span>
+    </span>
+  );
+}
+
 function groupById(id: string): WordGroup | undefined {
   return data.find((g) => g.id === id);
 }
@@ -125,17 +136,18 @@ export default function App() {
                         {(fc || sp) && (
                           <span className="group-scores">
                             {fc && (
-                              <span>
-                                כרטיסיות: {fc.lastScoreNumerator}/
-                                {fc.lastScoreDenominator}
-                              </span>
+                              <ScoreBadge
+                                label="כרטיסיות"
+                                score={fc.lastScoreNumerator}
+                                total={fc.lastScoreDenominator}
+                              />
                             )}
-                            {fc && sp ? " · " : ""}
                             {sp && (
-                              <span>
-                                איות: {sp.lastScoreNumerator}/
-                                {sp.lastScoreDenominator}
-                              </span>
+                              <ScoreBadge
+                                label="איות"
+                                score={sp.lastScoreNumerator}
+                                total={sp.lastScoreDenominator}
+                              />
                             )}
                           </span>
                         )}
