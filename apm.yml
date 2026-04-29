@@ -1,0 +1,11 @@
+name: vibecode-learn-english
+version: 1.0.0
+description: APM project for vibecode-learn-english
+author: Liran Tal
+dependencies:
+  apm:
+  - cloudflare/skills/skills/wrangler
+  - cloudflare/skills/skills/cloudflare
+  mcp: []
+includes: auto
+scripts: {}
