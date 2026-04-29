@@ -85,14 +85,14 @@ export default function App() {
             <main className="grow main-pad column gap">
               <button
                 type="button"
-                className="btn primary huge"
+                className="btn mode-btn huge"
                 onClick={startFlashcards}
               >
                 כרטיסיות — משמעות בעברית
               </button>
               <button
                 type="button"
-                className="btn secondary huge"
+                className="btn mode-btn huge"
                 onClick={startSpelling}
               >
                 איות — שמיעה והקלדה

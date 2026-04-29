@@ -270,6 +270,17 @@ body {
   font-size: 1.05rem;
 }
 
+.btn.mode-btn {
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--surface2);
+}
+
+.btn.mode-btn:active {
+  border-color: var(--primary);
+  background: var(--surface2);
+}
+
 /* ===== Sticky footer ===== */
 .sticky-footer {
   position: sticky;
@@ -281,34 +292,35 @@ body {
 }
 
 /* ===== Flashcard ===== */
-.flashcard {
+.fc-card {
   width: 100%;
   max-width: 340px;
-  aspect-ratio: 5 / 4;
-  border: none;
-  padding: 0;
-  background: transparent;
-  perspective: 900px;
+  height: 220px;
+  perspective: 1000px;
   cursor: pointer;
   touch-action: manipulation;
+  outline: none;
 }
 
-.flashcard-inner {
+.fc-card__inner {
   position: relative;
   width: 100%;
   height: 100%;
+  transition: transform 0.5s ease;
   transform-style: preserve-3d;
-  transition: transform 0.45s ease;
   border-radius: var(--radius);
 }
 
-.flashcard.flipped .flashcard-inner {
+.fc-card--flipped .fc-card__inner {
   transform: rotateY(180deg);
 }
 
-.flashcard-face {
+.fc-card__face {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: var(--radius);
@@ -316,42 +328,41 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 24px 20px;
+}
+
+.fc-card__front {
   background: var(--surface);
   border: 2px solid var(--surface2);
-  overflow: hidden;
 }
 
-.flashcard-face.back {
-  transform: rotateY(180deg);
+.fc-card__back {
   background: linear-gradient(160deg, #1e3a5f, #1a2f45);
-  border-color: var(--primary-dim);
+  border: 2px solid var(--primary-dim);
+  transform: rotateY(180deg);
 }
 
-.flashcard-label {
+.fc-card__label {
+  margin: 0 0 10px;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
-  margin-bottom: 12px;
 }
 
-.flashcard-word {
-  display: block;
-  width: 100%;
-  font-size: clamp(1.6rem, 6vw, 2.4rem);
+.fc-card__word {
+  margin: 0;
+  font-size: clamp(1.6rem, 7vw, 2.6rem);
   font-weight: 700;
   text-align: center;
   color: var(--text);
   direction: ltr;
-  word-break: normal;
-  overflow-wrap: break-word;
+  line-height: 1.3;
 }
 
-.flashcard-word.he {
+.fc-card__word--he {
   direction: rtl;
-  font-size: clamp(1.4rem, 5vw, 2rem);
-  color: var(--text);
+  font-size: clamp(1.4rem, 6vw, 2.2rem);
 }
 
 .hint {

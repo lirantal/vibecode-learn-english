@@ -120,23 +120,30 @@ export default function FlashcardSession({
       </header>
 
       <div className="grow flex-center">
-        <button
-          type="button"
-          className={`flashcard ${flipped ? "flipped" : ""}`}
+        <div
+          className={`fc-card ${flipped ? "fc-card--flipped" : ""}`}
           onClick={() => setFlipped((f) => !f)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFlipped((f) => !f);
+            }
+          }}
           aria-label={flipped ? "חזרה לאנגלית" : "הראה תרגום בעברית"}
         >
-          <span className="flashcard-inner">
-            <span className="flashcard-face front">
-              <span className="flashcard-label">English</span>
-              <span className="flashcard-word">{current.en}</span>
-            </span>
-            <span className="flashcard-face back">
-              <span className="flashcard-label">תרגום</span>
-              <span className="flashcard-word he">{current.he}</span>
-            </span>
-          </span>
-        </button>
+          <div className="fc-card__inner">
+            <div className="fc-card__face fc-card__front">
+              <p className="fc-card__label">English</p>
+              <p className="fc-card__word">{current.en}</p>
+            </div>
+            <div className="fc-card__face fc-card__back">
+              <p className="fc-card__label">תרגום לעברית</p>
+              <p className="fc-card__word fc-card__word--he">{current.he}</p>
+            </div>
+          </div>
+        </div>
         <p className="hint tap-hint">
           {flipped
             ? "ידעת את התשובה? סמנו למטה"
