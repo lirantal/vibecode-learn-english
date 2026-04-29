@@ -124,7 +124,7 @@ export default function FlashcardSession({
           type="button"
           className={`flashcard ${flipped ? "flipped" : ""}`}
           onClick={() => setFlipped((f) => !f)}
-          aria-label={flipped ? "Show English" : "Show Hebrew"}
+          aria-label={flipped ? "חזרה לאנגלית" : "הראה תרגום בעברית"}
         >
           <span className="flashcard-inner">
             <span className="flashcard-face front">
@@ -132,31 +132,33 @@ export default function FlashcardSession({
               <span className="flashcard-word">{current.en}</span>
             </span>
             <span className="flashcard-face back">
-              <span className="flashcard-label">עברית</span>
+              <span className="flashcard-label">תרגום</span>
               <span className="flashcard-word he">{current.he}</span>
             </span>
           </span>
         </button>
         <p className="hint tap-hint">
-          {flipped ? "בחר למטה — האם ידעת?" : "לחץ להפוך את הכרטיס"}
+          {flipped
+            ? "ידעת את התשובה? סמנו למטה"
+            : "לחץ על הכרטיס לראות את התרגום"}
         </p>
       </div>
 
       {flipped && (
-        <footer className="sticky-footer row gap">
+        <footer className="sticky-footer row rating-footer">
           <button
             type="button"
-            className="btn flex1 success"
+            className="btn success"
             onClick={() => finishCard("know")}
           >
-            יודע
+            ידעתי ✓
           </button>
           <button
             type="button"
-            className="btn flex1 warn"
+            className="btn warn"
             onClick={() => finishCard("more")}
           >
-            צריך עוד
+            לא ידעתי ✗
           </button>
         </footer>
       )}

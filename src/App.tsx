@@ -17,9 +17,7 @@ export default function App() {
   const progress = useMemo(() => loadProgress(), [view, sessionNonce]);
 
   const selectedGroup =
-    view.name === "home"
-      ? undefined
-      : groupById(view.groupId);
+    view.name === "home" ? undefined : groupById(view.groupId);
 
   const pickGroup = (g: WordGroup) => {
     setLastSelectedGroupId(g.id);
@@ -36,106 +34,120 @@ export default function App() {
     setView({ name: "spelling", groupId: view.groupId });
   };
 
-  if (view.name === "flashcard" && selectedGroup) {
-    return (
-      <FlashcardSession
-        key={`fc-${selectedGroup.id}-${sessionNonce}`}
-        group={selectedGroup}
-        onRepeatSame={() => setSessionNonce((n) => n + 1)}
-        onChangeMode={() => setView({ name: "pickMode", groupId: selectedGroup.id })}
-        onHome={() => setView({ name: "home" })}
-      />
-    );
-  }
+  const goHome = () => setView({ name: "home" });
 
-  if (view.name === "spelling" && selectedGroup) {
-    return (
-      <SpellingSession
-        key={`sp-${selectedGroup.id}-${sessionNonce}`}
-        group={selectedGroup}
-        onRepeatSame={() => setSessionNonce((n) => n + 1)}
-        onChangeMode={() => setView({ name: "pickMode", groupId: selectedGroup.id })}
-        onHome={() => setView({ name: "home" })}
-      />
-    );
-  }
-
-  if (view.name === "pickMode" && selectedGroup) {
-    return (
-      <div className="app column">
-        <header className="app-head">
-          <button
-            type="button"
-            className="btn back"
-            onClick={() => setView({ name: "home" })}
-          >
-            ← חזרה
-          </button>
-          <h1 className="title">בחר מצב</h1>
-          <p className="subtitle">{selectedGroup.title}</p>
-        </header>
-        <main className="grow main-pad column gap">
-          <button
-            type="button"
-            className="btn primary huge"
-            onClick={startFlashcards}
-          >
-            כרטיסיות — משמעות בעברית
-          </button>
-          <button
-            type="button"
-            className="btn secondary huge"
-            onClick={startSpelling}
-          >
-            איות — שמיעה והקלדה
-          </button>
-        </main>
-      </div>
-    );
-  }
+  const isHome = view.name === "home";
 
   return (
-    <div className="app column">
-      <header className="app-head">
-        <h1 className="title">תרגול אנגלית</h1>
-        <p className="subtitle">בחר קבוצת מילים</p>
-      </header>
-      <main className="grow main-pad">
-        <ul className="group-list">
-          {data.map((g) => {
-            const p = progress.byGroup[g.id];
-            const fc = p?.flashcard;
-            const sp = p?.spelling;
-            return (
-              <li key={g.id}>
-                <button
-                  type="button"
-                  className="group-card"
-                  onClick={() => pickGroup(g)}
-                >
-                  <span className="group-title">{g.title}</span>
-                  <span className="group-meta">{g.words.length} מילים</span>
-                  {(fc || sp) && (
-                    <span className="group-scores">
-                      {fc && (
-                        <span>
-                          כרטיסיות: {fc.lastScoreNumerator}/{fc.lastScoreDenominator}
-                        </span>
-                      )}
-                      {fc && sp ? " · " : ""}
-                      {sp && (
-                        <span>
-                          איות: {sp.lastScoreNumerator}/{sp.lastScoreDenominator}
-                        </span>
-                      )}
-                    </span>
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </main>
-    </div>
+    <>
+      {/* ===== Navbar ===== */}
+      <nav className="navbar">
+        <h1 className="navbar-title">תרגול אנגלית</h1>
+        {!isHome && (
+          <button type="button" className="btn-nav" onClick={goHome}>
+            ← תפריט ראשי
+          </button>
+        )}
+      </nav>
+
+      {/* ===== Page content ===== */}
+      <div className="page-wrap">
+        {view.name === "flashcard" && selectedGroup && (
+          <FlashcardSession
+            key={`fc-${selectedGroup.id}-${sessionNonce}`}
+            group={selectedGroup}
+            onRepeatSame={() => setSessionNonce((n) => n + 1)}
+            onChangeMode={() =>
+              setView({ name: "pickMode", groupId: selectedGroup.id })
+            }
+            onHome={goHome}
+          />
+        )}
+
+        {view.name === "spelling" && selectedGroup && (
+          <SpellingSession
+            key={`sp-${selectedGroup.id}-${sessionNonce}`}
+            group={selectedGroup}
+            onRepeatSame={() => setSessionNonce((n) => n + 1)}
+            onChangeMode={() =>
+              setView({ name: "pickMode", groupId: selectedGroup.id })
+            }
+            onHome={goHome}
+          />
+        )}
+
+        {view.name === "pickMode" && selectedGroup && (
+          <div className="app column">
+            <header className="app-head">
+              <h1 className="title">בחר מצב תרגול</h1>
+              <p className="subtitle">{selectedGroup.title}</p>
+            </header>
+            <main className="grow main-pad column gap">
+              <button
+                type="button"
+                className="btn primary huge"
+                onClick={startFlashcards}
+              >
+                כרטיסיות — משמעות בעברית
+              </button>
+              <button
+                type="button"
+                className="btn secondary huge"
+                onClick={startSpelling}
+              >
+                איות — שמיעה והקלדה
+              </button>
+            </main>
+          </div>
+        )}
+
+        {view.name === "home" && (
+          <div className="app column">
+            <header className="app-head">
+              <h1 className="title">בחר קבוצת מילים</h1>
+              <p className="subtitle">בחר קבוצה ותתחיל לתרגל</p>
+            </header>
+            <main className="grow main-pad">
+              <ul className="group-list">
+                {data.map((g) => {
+                  const p = progress.byGroup[g.id];
+                  const fc = p?.flashcard;
+                  const sp = p?.spelling;
+                  return (
+                    <li key={g.id}>
+                      <button
+                        type="button"
+                        className="group-card"
+                        onClick={() => pickGroup(g)}
+                      >
+                        <span className="group-title">{g.title}</span>
+                        <span className="group-meta">{g.words.length} מילים</span>
+                        {(fc || sp) && (
+                          <span className="group-scores">
+                            {fc && (
+                              <span>
+                                כרטיסיות: {fc.lastScoreNumerator}/
+                                {fc.lastScoreDenominator}
+                              </span>
+                            )}
+                            {fc && sp ? " · " : ""}
+                            {sp && (
+                              <span>
+                                איות: {sp.lastScoreNumerator}/
+                                {sp.lastScoreDenominator}
+                              </span>
+                            )}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </main>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
