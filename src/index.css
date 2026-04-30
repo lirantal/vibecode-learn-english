@@ -459,9 +459,15 @@ body {
 }
 
 /* ===== Spelling ===== */
-.play-btn {
+.play-btns {
+  display: flex;
+  gap: 10px;
   width: 100%;
   max-width: 320px;
+}
+
+.play-btn {
+  flex: 1;
 }
 
 .spelling-top {
@@ -514,6 +520,24 @@ body {
 .slot.fb-absent {
   background: rgba(100, 116, 139, 0.35);
   border-color: var(--absent);
+}
+
+.letter-grid--success .slot.letter {
+  background: rgba(34, 197, 94, 0.3);
+  border-color: var(--correct);
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.success-hint {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .feedback-hint {

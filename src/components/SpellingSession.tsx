@@ -48,6 +48,7 @@ export default function SpellingSession({
   );
   const [slots, setSlots] = useState(() => initSlots(normalizeEn(deck[0].en)));
   const [feedback, setFeedback] = useState<LetterFeedback[] | null>(null);
+  const [showingSuccess, setShowingSuccess] = useState(false);
   const [weakList, setWeakList] = useState<string[]>([]);
   const [phase, setPhase] = useState<"run" | "summary">("run");
 
@@ -77,6 +78,7 @@ export default function SpellingSession({
     setSlots(initSlots(canonical));
     setTriesThisWord(0);
     setFeedback(null);
+    setShowingSuccess(false);
   }, [canonical]);
 
   const persist = useCallback(
@@ -105,8 +107,18 @@ export default function SpellingSession({
     [persist]
   );
 
+  const advanceAfterCorrect = useCallback(() => {
+    if (isLast) {
+      goSummary([...weakRef.current], correctRef.current);
+    } else {
+      setWordIndex((i) => i + 1);
+      setFeedback(null);
+      setShowingSuccess(false);
+    }
+  }, [isLast, goSummary]);
+
   const submit = useCallback(() => {
-    if (!allLetterSlotsFilled || phase !== "run") return;
+    if (!allLetterSlotsFilled || phase !== "run" || showingSuccess) return;
     const displayEn = word.en.trim();
 
     if (answersMatch(filledGuess, canonical)) {
@@ -116,12 +128,11 @@ export default function SpellingSession({
       }
       correctRef.current += 1;
 
-      if (isLast) {
-        goSummary([...weakRef.current], correctRef.current);
-        return;
-      }
-      setWordIndex((i) => i + 1);
-      setFeedback(null);
+      setShowingSuccess(true);
+      setFeedback(canonical.split("").map(() => "correct" as const));
+      setTimeout(() => {
+        advanceAfterCorrect();
+      }, 2000);
       return;
     }
     setTriesThisWord((t) => t + 1);
@@ -129,15 +140,16 @@ export default function SpellingSession({
   }, [
     allLetterSlotsFilled,
     phase,
+    showingSuccess,
     word,
     filledGuess,
     canonical,
     triesThisWord,
-    isLast,
-    goSummary,
+    advanceAfterCorrect,
   ]);
 
   const skipWord = useCallback(() => {
+    if (showingSuccess) return;
     const displayEn = word.en.trim();
     weakRef.current = [...weakRef.current, displayEn];
     if (isLast) {
@@ -146,11 +158,12 @@ export default function SpellingSession({
     }
     setWordIndex((i) => i + 1);
     setFeedback(null);
-  }, [word, isLast, goSummary]);
+    setShowingSuccess(false);
+  }, [showingSuccess, word, isLast, goSummary]);
 
   const onLetter = useCallback(
     (ch: string) => {
-      if (phase !== "run") return;
+      if (phase !== "run" || showingSuccess) return;
       setFeedback(null);
       const c = canonical.split("");
       const idx = c.findIndex(
@@ -163,11 +176,11 @@ export default function SpellingSession({
         return next;
       });
     },
-    [phase, canonical, slots]
+    [phase, showingSuccess, canonical, slots]
   );
 
   const onBackspace = useCallback(() => {
-    if (phase !== "run") return;
+    if (phase !== "run" || showingSuccess) return;
     setFeedback(null);
     const c = canonical.split("");
     let idx = -1;
@@ -184,7 +197,7 @@ export default function SpellingSession({
       next[idx] = "";
       return next;
     });
-  }, [phase, canonical, slots]);
+  }, [phase, showingSuccess, canonical, slots]);
 
   const handlersRef = useRef({
     submit,
@@ -192,13 +205,14 @@ export default function SpellingSession({
     onBackspace,
     allLetterSlotsFilled,
     phase,
+    showingSuccess,
   });
-  handlersRef.current = { submit, onLetter, onBackspace, allLetterSlotsFilled, phase };
+  handlersRef.current = { submit, onLetter, onBackspace, allLetterSlotsFilled, phase, showingSuccess };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const h = handlersRef.current;
-      if (h.phase !== "run") return;
+      if (h.phase !== "run" || h.showingSuccess) return;
       if (e.key === "Enter") {
         e.preventDefault();
         h.submit();
@@ -218,9 +232,8 @@ export default function SpellingSession({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const play = () => {
-    speakEnglish(word.en);
-  };
+  const play = () => speakEnglish(word.en);
+  const playSlow = () => speakEnglish(word.en, true);
 
   if (phase === "summary") {
     const correctCount = correctRef.current;
@@ -274,12 +287,17 @@ export default function SpellingSession({
       </header>
 
       <div className="spelling-top grow">
-        <button type="button" className="btn primary play-btn" onClick={play}>
-          השמע את המילה
-        </button>
+        <div className="play-btns">
+          <button type="button" className="btn primary play-btn" onClick={play}>
+            השמע
+          </button>
+          <button type="button" className="btn secondary play-btn" onClick={playSlow}>
+            השמע לאט
+          </button>
+        </div>
         <p className="hint">לחץ להשמעה, ואז הקלד או השתמש במקלדת למטה.</p>
 
-        <div className="letter-grid" role="group" aria-label="Spelling slots">
+        <div className={`letter-grid ${showingSuccess ? "letter-grid--success" : ""}`} role="group" aria-label="Spelling slots">
           {chars.map((ch, i) => {
             if (ch === " ") {
               return (
@@ -305,13 +323,17 @@ export default function SpellingSession({
           })}
         </div>
 
-        {feedback && (
+        {showingSuccess && (
+          <p className="hint success-hint">נכון!</p>
+        )}
+
+        {feedback && !showingSuccess && (
           <p className="hint feedback-hint">
             ירוק = מקום נכון, צהוב = באותה מילה אבל מקום אחר, אפור = לא במילה.
           </p>
         )}
 
-        <button type="button" className="btn ghost skip-btn" onClick={skipWord}>
+        <button type="button" className="btn ghost skip-btn" onClick={skipWord} disabled={showingSuccess}>
           דלג (נחשב כצריך תרגול)
         </button>
       </div>
@@ -321,7 +343,7 @@ export default function SpellingSession({
           onLetter={onLetter}
           onBackspace={onBackspace}
           onEnter={submit}
-          enterDisabled={!allLetterSlotsFilled}
+          enterDisabled={!allLetterSlotsFilled || showingSuccess}
         />
       </footer>
     </div>
