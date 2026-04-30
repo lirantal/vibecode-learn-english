@@ -34,31 +34,33 @@ export default function FlashcardSession({
   const isLast = index >= deck.length - 1;
 
   const persist = useCallback(
-    (weak: string[], known: number) => {
+    (weak: string[], known: number, total: number) => {
       updateGroupModeStats(
         group.id,
         "flashcard",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: known,
-          lastScoreDenominator: deck.length,
+          lastScoreDenominator: total,
           lastWeakEn: weak,
         },
         group.id
       );
     },
-    [group.id, deck.length]
+    [group.id]
   );
 
   const finishCard = (rating: "know" | "more") => {
     const en = current.en;
     const addWeak = rating === "more";
+    const newWeak = addWeak ? [...needMore, en] : [...needMore];
+    const wordsSoFar = index + 1;
+    const known = wordsSoFar - newWeak.length;
+
+    persist(newWeak, known, wordsSoFar);
 
     if (isLast) {
-      const weak = addWeak ? [...needMore, en] : [...needMore];
-      const known = deck.length - weak.length;
-      persist(weak, known);
-      setNeedMore(weak);
+      setNeedMore(newWeak);
       setPhase("summary");
       return;
     }

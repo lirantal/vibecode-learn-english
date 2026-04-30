@@ -82,40 +82,41 @@ export default function SpellingSession({
   }, [canonical]);
 
   const persist = useCallback(
-    (weak: string[], correct: number) => {
+    (weak: string[], correct: number, total: number) => {
       updateGroupModeStats(
         group.id,
         "spelling",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: correct,
-          lastScoreDenominator: deck.length,
+          lastScoreDenominator: total,
           lastWeakEn: weak,
         },
         group.id
       );
     },
-    [group.id, deck.length]
+    [group.id]
   );
 
   const goSummary = useCallback(
     (weak: string[], correct: number) => {
-      persist(weak, correct);
+      persist(weak, correct, deck.length);
       setWeakList(weak);
       setPhase("summary");
     },
-    [persist]
+    [persist, deck.length]
   );
 
   const advanceAfterCorrect = useCallback(() => {
     if (isLast) {
       goSummary([...weakRef.current], correctRef.current);
     } else {
+      persist([...weakRef.current], correctRef.current, wordIndex + 1);
       setWordIndex((i) => i + 1);
       setFeedback(null);
       setShowingSuccess(false);
     }
-  }, [isLast, goSummary]);
+  }, [isLast, goSummary, persist, wordIndex]);
 
   const submit = useCallback(() => {
     if (!allLetterSlotsFilled || phase !== "run" || showingSuccess) return;
@@ -156,10 +157,11 @@ export default function SpellingSession({
       goSummary([...weakRef.current], correctRef.current);
       return;
     }
+    persist([...weakRef.current], correctRef.current, wordIndex + 1);
     setWordIndex((i) => i + 1);
     setFeedback(null);
     setShowingSuccess(false);
-  }, [showingSuccess, word, isLast, goSummary]);
+  }, [showingSuccess, word, isLast, goSummary, persist, wordIndex]);
 
   const onLetter = useCallback(
     (ch: string) => {
