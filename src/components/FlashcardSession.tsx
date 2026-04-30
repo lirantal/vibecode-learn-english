@@ -114,7 +114,7 @@ export default function FlashcardSession({
     <div className="session column">
       <header className="session-head">
         <p className="progress">
-          {index + 1} / {deck.length}
+          מילה {index + 1} מתוך {deck.length}
         </p>
         <h1 className="title">כרטיסיות</h1>
       </header>

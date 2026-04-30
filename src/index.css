@@ -162,9 +162,13 @@ body {
 .progress {
   margin: 0 0 4px;
   font-size: 0.85rem;
-  color: var(--muted);
-  direction: ltr;
-  text-align: right;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 4px 10px;
+  display: inline-block;
 }
 
 /* ===== Group list (home) ===== */
