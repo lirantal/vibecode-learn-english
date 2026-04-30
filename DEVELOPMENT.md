@@ -96,8 +96,10 @@ Rules:
 - Shows empty letter slots (Wordle/Scrabble style).
 - User types using physical keyboard or on-screen QWERTY (A–Z only).
 - On submit: Wordle-style color feedback (green = correct position, yellow = in word but wrong position, gray = not in word).
+- On correct answer: all boxes flash green with a pop animation + "!נכון" text for 1.5s, then auto-advances to next word.
 - Unlimited attempts per word; words needing 4+ attempts go on the "practice more" list.
 - "דלג" (skip) counts as needs-practice.
+- Score is saved incrementally after each word (not only at end), so partial progress shows on the home screen even if the user exits mid-session.
 
 ## Persistence
 
@@ -118,6 +120,8 @@ Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
 
 All read/write goes through `src/lib/storage.ts` — swap to `localStorage` there if cross-session persistence is desired.
 
+Spelling mode persists progress **after every word** (not just at session end). This means partial scores appear on the home screen even if the user navigates away mid-session via the navbar.
+
 ## Styling Conventions
 
 - **RTL by default** — `<html dir="rtl" lang="he">`. English text elements use `direction: ltr` explicitly.
@@ -125,6 +129,15 @@ All read/write goes through `src/lib/storage.ts` — swap to `localStorage` ther
 - **Dark theme** — CSS variables in `:root` (e.g. `--bg`, `--surface`, `--primary`).
 - **No CSS framework** — all styles in `src/index.css`.
 - On-screen keyboard and letter grid are always `direction: ltr`.
+
+## Home Screen Score Badges
+
+Group cards on the home screen show color-coded score pills from the last run:
+- **Green** — 80%+ correct (great)
+- **Yellow** — 50–79% (needs some work)
+- **Red** — below 50% (needs more practice)
+
+Each badge shows the mode name and the fraction (e.g. "כרטיסיות 8/10").
 
 ## Key Design Decisions
 
