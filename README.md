@@ -47,3 +47,7 @@ Vite + React + TypeScript. No backend. All data and scores live in the browser.
 ## License
 
 Private project.
+
+## Contributing
+
+Please consult [CONTRIBUTING](./CONTRIBUTING.md) for guidelines on contributing to this project.
