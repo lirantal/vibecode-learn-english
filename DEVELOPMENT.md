@@ -110,7 +110,7 @@ Rules:
 - `he` is the Hebrew meaning shown on the flashcard back.
 - Multi-word phrases are supported — spaces become gaps in the spelling grid.
 - Grammar-choice groups use `sentences` instead of `words`. Each sentence has `prefix`, two `choices`, `suffix`, and `correctChoice`.
-- Keep grammar-choice groups to 5 sentences for the portrait mobile layout.
+- Grammar-choice banks can contain more than 5 sentences, but each run samples 5 sentences for the portrait mobile layout.
 - Vite picks up changes via HMR (no restart needed in dev).
 
 ## Practice Modes
@@ -145,7 +145,7 @@ Rules:
 ### Grammar Choice
 
 - Available for groups with `"exerciseType": "grammarChoice"`.
-- Shows 5 English sentences in a compact vertical list. Each sentence renders two inline choices as elevated button-like controls.
+- Samples 5 English sentences from the bank and shows them in a compact vertical list. Each sentence renders two inline choices as elevated button-like controls.
 - English sentence content is explicitly LTR inside the RTL app shell.
 - Wrong choices turn red, lock the sentence briefly for 1 second, then reset so the student can try again.
 - Correct choices turn green, stay locked, and count the sentence as complete.

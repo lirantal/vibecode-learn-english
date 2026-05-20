@@ -37,7 +37,7 @@ Edit [`src/data/wordGroups.json`](src/data/wordGroups.json):
 
 For matching-only groups, add `"exerciseType": "matching"` and keep each group to 10 words or fewer for the two-column layout.
 
-For grammar-choice groups, add `"exerciseType": "grammarChoice"` and a `sentences` array of 5 prompts:
+For grammar-choice groups, add `"exerciseType": "grammarChoice"` and a `sentences` array with at least 5 prompts. Each run samples 5 sentences from the bank:
 
 ```json
 {

@@ -235,6 +235,49 @@
           "correctChoice": "Does"
         }
       ]
+    },
+    {
+      "id": "grammar-present-simple-negative-02",
+      "title": "דקדוק — don't / doesn't 2",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "Pupils ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " go to school at night.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "A vet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " take care of kids.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "Tina ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " work on Mondays.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "Dogs ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " eat chocolate.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "The baby ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a telephone.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "Monkeys ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " read books.",
+          "correctChoice": "don't"
+        }
+      ]
     }
   ]
 }

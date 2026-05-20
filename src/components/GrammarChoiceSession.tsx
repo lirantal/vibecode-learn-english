@@ -9,6 +9,17 @@ type Props = {
   onHome: () => void;
 };
 
+const SENTENCES_PER_RUN = 5;
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 function cx(...parts: Array<string | false | undefined>): string {
   return parts.filter(Boolean).join(" ");
 }
@@ -23,7 +34,10 @@ export default function GrammarChoiceSession({
   onChangeGroup,
   onHome,
 }: Props) {
-  const sentences = useMemo(() => group.sentences.slice(0, 5), [group.sentences]);
+  const sentences = useMemo(
+    () => shuffle(group.sentences).slice(0, SENTENCES_PER_RUN),
+    [group.sentences]
+  );
   const [correctChoices, setCorrectChoices] = useState<Record<number, string>>({});
   const [wrongChoices, setWrongChoices] = useState<Record<number, string>>({});
   const [missedIndexes, setMissedIndexes] = useState<number[]>([]);
