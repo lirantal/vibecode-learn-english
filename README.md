@@ -55,6 +55,8 @@ For grammar-choice groups, add `"exerciseType": "grammarChoice"` and a `sentence
 }
 ```
 
+Chart-style grammar worksheets can be converted into larger grammar-choice banks by expanding each subject + verb phrase combination into a sentence object.
+
 Changes are picked up instantly via hot-reload.
 
 ## Documentation

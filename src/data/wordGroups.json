@@ -278,6 +278,349 @@
           "correctChoice": "don't"
         }
       ]
+    },
+    {
+      "id": "grammar-present-simple-negative-keywords-01",
+      "title": "דקדוק — משפטים עם don't / doesn't",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        }
+      ]
     }
   ]
 }

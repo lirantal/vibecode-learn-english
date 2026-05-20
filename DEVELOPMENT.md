@@ -111,6 +111,7 @@ Rules:
 - Multi-word phrases are supported — spaces become gaps in the spelling grid.
 - Grammar-choice groups use `sentences` instead of `words`. Each sentence has `prefix`, two `choices`, `suffix`, and `correctChoice`.
 - Grammar-choice banks can contain more than 5 sentences, but each run samples 5 sentences for the portrait mobile layout.
+- Chart-style grammar worksheets can be adapted by expanding each subject + verb phrase combination into a `sentences[]` item.
 - Vite picks up changes via HMR (no restart needed in dev).
 
 ## Practice Modes
