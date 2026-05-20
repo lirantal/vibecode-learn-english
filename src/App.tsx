@@ -2,10 +2,11 @@ import { useMemo, useState } from "react";
 import type { AppView, WordGroup } from "./types";
 import wordGroupsData from "./data/wordGroups.json";
 import FlashcardSession from "./components/FlashcardSession";
+import MatchingSession from "./components/MatchingSession";
 import SpellingSession from "./components/SpellingSession";
 import { loadProgress, setLastSelectedGroupId } from "./lib/storage";
 
-const data = wordGroupsData.groups;
+const data = wordGroupsData.groups as WordGroup[];
 
 function ScoreBadge({ label, score, total }: { label: string; score: number; total: number }) {
   const pct = total > 0 ? score / total : 0;
@@ -22,6 +23,10 @@ function groupById(id: string): WordGroup | undefined {
   return data.find((g) => g.id === id);
 }
 
+function isMatchingGroup(group: WordGroup): boolean {
+  return group.exerciseType === "matching";
+}
+
 export default function App() {
   const [view, setView] = useState<AppView>({ name: "home" });
   const [sessionNonce, setSessionNonce] = useState(0);
@@ -32,7 +37,11 @@ export default function App() {
 
   const pickGroup = (g: WordGroup) => {
     setLastSelectedGroupId(g.id);
-    setView({ name: "pickMode", groupId: g.id });
+    setView(
+      isMatchingGroup(g)
+        ? { name: "matching", groupId: g.id }
+        : { name: "pickMode", groupId: g.id }
+    );
   };
 
   const startFlashcards = () => {
@@ -87,6 +96,16 @@ export default function App() {
           />
         )}
 
+        {view.name === "matching" && selectedGroup && (
+          <MatchingSession
+            key={`mt-${selectedGroup.id}-${sessionNonce}`}
+            group={selectedGroup}
+            onRepeatSame={() => setSessionNonce((n) => n + 1)}
+            onChangeGroup={goHome}
+            onHome={goHome}
+          />
+        )}
+
         {view.name === "pickMode" && selectedGroup && (
           <div className="app column">
             <header className="app-head">
@@ -124,6 +143,7 @@ export default function App() {
                   const p = progress.byGroup[g.id];
                   const fc = p?.flashcard;
                   const sp = p?.spelling;
+                  const mt = p?.matching;
                   return (
                     <li key={g.id}>
                       <button
@@ -132,8 +152,11 @@ export default function App() {
                         onClick={() => pickGroup(g)}
                       >
                         <span className="group-title">{g.title}</span>
-                        <span className="group-meta">{g.words.length} מילים</span>
-                        {(fc || sp) && (
+                        <span className="group-meta">
+                          {g.words.length} מילים
+                          {isMatchingGroup(g) ? " · חיבור תרגומים" : ""}
+                        </span>
+                        {(fc || sp || mt) && (
                           <span className="group-scores">
                             {fc && (
                               <ScoreBadge
@@ -147,6 +170,13 @@ export default function App() {
                                 label="איות"
                                 score={sp.lastScoreNumerator}
                                 total={sp.lastScoreDenominator}
+                              />
+                            )}
+                            {mt && (
+                              <ScoreBadge
+                                label="חיבורים"
+                                score={mt.lastScoreNumerator}
+                                total={mt.lastScoreDenominator}
                               />
                             )}
                           </span>

@@ -1,4 +1,4 @@
-import type { GroupProgress, ModeStats, StoredProgress } from "../types";
+import type { GroupProgress, ModeStats, PracticeMode, StoredProgress } from "../types";
 
 const KEY = "vibecode-learn-english:v1";
 
@@ -26,7 +26,7 @@ export function saveProgress(data: StoredProgress): void {
 
 export function updateGroupModeStats(
   groupId: string,
-  mode: "flashcard" | "spelling",
+  mode: PracticeMode,
   stats: ModeStats,
   lastSelected?: string
 ): void {

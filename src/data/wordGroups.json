@@ -115,6 +115,52 @@
         { "en": "Pay", "he": "לשלם" },
         { "en": "Through", "he": "דרך" }
       ]
+    },
+    {
+      "id": "cool-unit2-matching-01",
+      "title": "Cool Unit 2 — חיבור תרגומים 1",
+      "exerciseType": "matching",
+      "words": [
+        { "en": "Movie", "he": "סרט" },
+        { "en": "Detective", "he": "בלש" },
+        { "en": "Writer", "he": "סופר" },
+        { "en": "Wolf", "he": "זאב" },
+        { "en": "Forest", "he": "יער" },
+        { "en": "Clothes", "he": "בגדים" },
+        { "en": "Fairy", "he": "פיה" },
+        { "en": "Sun", "he": "שמש" },
+        { "en": "Flower", "he": "פרח" },
+        { "en": "Diary", "he": "יומן" }
+      ]
+    },
+    {
+      "id": "cool-unit2-matching-02",
+      "title": "Cool Unit 2 — חיבור תרגומים 2",
+      "exerciseType": "matching",
+      "words": [
+        { "en": "Dangerous", "he": "מסוכן" },
+        { "en": "False", "he": "שקרי" },
+        { "en": "Dish", "he": "צלחת" },
+        { "en": "Hero", "he": "גיבור" },
+        { "en": "Safe", "he": "בטוח" },
+        { "en": "Always", "he": "תמיד" },
+        { "en": "Same", "he": "אותו דבר" },
+        { "en": "True", "he": "אמת" },
+        { "en": "Large", "he": "גדול" },
+        { "en": "Villain", "he": "רשע" }
+      ]
+    },
+    {
+      "id": "cool-unit2-matching-03",
+      "title": "Cool Unit 2 — חיבור תרגומים 3",
+      "exerciseType": "matching",
+      "words": [
+        { "en": "Opinion", "he": "דעה" },
+        { "en": "Fact", "he": "עובדה" },
+        { "en": "Late", "he": "מאוחר" },
+        { "en": "Different", "he": "שונה" },
+        { "en": "Never", "he": "לעולם לא" }
+      ]
     }
   ]
 }

@@ -6,6 +6,7 @@ export type Word = {
 export type WordGroup = {
   id: string;
   title: string;
+  exerciseType?: "standard" | "matching";
   words: Word[];
 };
 
@@ -13,7 +14,7 @@ export type WordGroupsFile = {
   groups: WordGroup[];
 };
 
-export type PracticeMode = "flashcard" | "spelling";
+export type PracticeMode = "flashcard" | "spelling" | "matching";
 
 export type ModeStats = {
   lastRunAt: string;
@@ -25,6 +26,7 @@ export type ModeStats = {
 export type GroupProgress = {
   flashcard?: ModeStats;
   spelling?: ModeStats;
+  matching?: ModeStats;
 };
 
 export type StoredProgress = {
@@ -37,4 +39,5 @@ export type AppView =
   | { name: "home" }
   | { name: "pickMode"; groupId: string }
   | { name: "flashcard"; groupId: string }
-  | { name: "spelling"; groupId: string };
+  | { name: "spelling"; groupId: string }
+  | { name: "matching"; groupId: string };

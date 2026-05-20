@@ -6,6 +6,7 @@ A mobile-first web app for practicing English vocabulary. Designed for a 7th-gra
 
 1. **Know the Hebrew meaning** of each English word (flashcard mode)
 2. **Spell the English word** when hearing it (spelling mode with TTS + Wordle-style feedback)
+3. **Connect English words to Hebrew translations** (matching mode for dedicated word groups)
 
 ## Tech Stack
 
@@ -41,6 +42,7 @@ No backend. Fully static — word data ships with the bundle.
     │   └── normalize.ts    # String comparison + Wordle feedback
     └── components/
         ├── FlashcardSession.tsx
+        ├── MatchingSession.tsx
         ├── SpellingSession.tsx
         └── OnScreenKeyboard.tsx
 ```
@@ -52,6 +54,7 @@ Navigation is state-driven (no router library):
 ```
 Home (pick group) → Pick Mode → Flashcard Session → Summary
                               → Spelling Session  → Summary
+                  → Matching Session → Summary (for matching-only groups)
 ```
 
 A persistent **navbar** at the top allows returning home from any screen.
@@ -66,6 +69,7 @@ Edit `src/data/wordGroups.json`. The schema:
     {
       "id": "unique-slug",
       "title": "Display title (Hebrew is fine)",
+      "exerciseType": "matching",
       "words": [
         { "en": "English word", "he": "Hebrew translation" }
       ]
@@ -76,6 +80,7 @@ Edit `src/data/wordGroups.json`. The schema:
 
 Rules:
 - `id` must be unique across groups.
+- `exerciseType` is optional. Omit it for standard flashcard + spelling groups; set `"matching"` for groups that should open the connection exercise only.
 - `en` is used for TTS pronunciation, spelling slots, and display on the flashcard front.
 - `he` is the Hebrew meaning shown on the flashcard back.
 - Multi-word phrases are supported — spaces become gaps in the spelling grid.
@@ -101,6 +106,15 @@ Rules:
 - "דלג" (skip) counts as needs-practice.
 - Score is saved incrementally after each word (not only at end), so partial progress shows on the home screen even if the user exits mid-session.
 
+### Matching
+
+- Available for groups with `"exerciseType": "matching"`.
+- Shows English words in the left column and Hebrew translations in the right column.
+- User drags from the English connector dot to the matching Hebrew translation.
+- Correct connections stay visible as green lines; wrong connections flash red for 1 second and then disappear.
+- Score is first-try based: a word only counts correct if the first completed drag was to the correct translation. Words with a wrong first attempt still can be connected later, but go on the "practice more" list.
+- The board is designed for up to 10 words in the vertical two-column layout.
+
 ## Persistence
 
 Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
@@ -111,7 +125,8 @@ Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
   byGroup: {
     [groupId]: {
       flashcard?: { lastRunAt, lastScoreNumerator, lastScoreDenominator, lastWeakEn[] },
-      spelling?: { same shape }
+      spelling?: { same shape },
+      matching?: { same shape }
     }
   },
   lastSelectedGroupId?: string
