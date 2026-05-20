@@ -161,6 +161,80 @@
         { "en": "Different", "he": "שונה" },
         { "en": "Never", "he": "לעולם לא" }
       ]
+    },
+    {
+      "id": "grammar-present-simple-negative-01",
+      "title": "דקדוק — don't / doesn't",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " like ice cream.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "He ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have time.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "We ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " eat fruit.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "They ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " watch TV.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "The car ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " work.",
+          "correctChoice": "doesn't"
+        }
+      ]
+    },
+    {
+      "id": "grammar-present-simple-questions-01",
+      "title": "דקדוק — Do / Does",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " you eat pasta?",
+          "correctChoice": "Do"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " they go home?",
+          "correctChoice": "Do"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " we meet friends?",
+          "correctChoice": "Do"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " she help your sister?",
+          "correctChoice": "Does"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " the dog bark every night?",
+          "correctChoice": "Does"
+        }
+      ]
     }
   ]
 }

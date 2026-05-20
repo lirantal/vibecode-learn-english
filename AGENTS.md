@@ -2,7 +2,7 @@
 
 ## What Is This Project?
 
-A mobile-first English vocabulary practice app for Hebrew-speaking students. Built with Vite + React + TypeScript. No backend, no database — everything runs in the browser.
+A mobile-first English vocabulary and grammar practice app for Hebrew-speaking students. Built with Vite + React + TypeScript. No backend, no database — everything runs in the browser.
 
 ## Quick Start
 
@@ -37,7 +37,7 @@ pnpm run preview  # preview production build
 
 ## File to Edit for Word Content
 
-`src/data/wordGroups.json` — add groups or words here. See format in DEVELOPMENT.md.
+`src/data/wordGroups.json` — add word groups or grammar-choice sentence groups here. See format in DEVELOPMENT.md.
 
 ## Architecture & Detailed Docs
 

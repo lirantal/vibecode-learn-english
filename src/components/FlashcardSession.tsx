@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import type { WordGroup } from "../types";
+import type { WordListGroup } from "../types";
 import { updateGroupModeStats } from "../lib/storage";
 
 function shuffle<T>(arr: T[]): T[] {
@@ -12,7 +12,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 type Props = {
-  group: WordGroup;
+  group: WordListGroup;
   onRepeatSame: () => void;
   onChangeMode: () => void;
   onHome: () => void;

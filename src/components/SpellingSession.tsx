@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { WordGroup } from "../types";
+import type { WordListGroup } from "../types";
 import {
   answersMatch,
   normalizeEn,
@@ -27,7 +27,7 @@ function initSlots(canonical: string): string[] {
 }
 
 type Props = {
-  group: WordGroup;
+  group: WordListGroup;
   onRepeatSame: () => void;
   onChangeMode: () => void;
   onHome: () => void;

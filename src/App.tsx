@@ -1,7 +1,14 @@
 import { useMemo, useState } from "react";
-import type { AppView, WordGroup } from "./types";
+import type {
+  AppView,
+  GrammarChoiceGroup,
+  MatchingGroup,
+  WordGroup,
+  WordListGroup,
+} from "./types";
 import wordGroupsData from "./data/wordGroups.json";
 import FlashcardSession from "./components/FlashcardSession";
+import GrammarChoiceSession from "./components/GrammarChoiceSession";
 import MatchingSession from "./components/MatchingSession";
 import SpellingSession from "./components/SpellingSession";
 import { loadProgress, setLastSelectedGroupId } from "./lib/storage";
@@ -23,8 +30,24 @@ function groupById(id: string): WordGroup | undefined {
   return data.find((g) => g.id === id);
 }
 
-function isMatchingGroup(group: WordGroup): boolean {
+function isMatchingGroup(group: WordGroup): group is MatchingGroup {
   return group.exerciseType === "matching";
+}
+
+function isGrammarChoiceGroup(group: WordGroup): group is GrammarChoiceGroup {
+  return group.exerciseType === "grammarChoice";
+}
+
+function isWordListGroup(group: WordGroup): group is WordListGroup {
+  return group.exerciseType === undefined || group.exerciseType === "standard";
+}
+
+function groupMeta(group: WordGroup): string {
+  if (isGrammarChoiceGroup(group)) {
+    return `${group.sentences.length} משפטים · דקדוק`;
+  }
+
+  return `${group.words.length} מילים${isMatchingGroup(group) ? " · חיבור תרגומים" : ""}`;
 }
 
 export default function App() {
@@ -37,11 +60,17 @@ export default function App() {
 
   const pickGroup = (g: WordGroup) => {
     setLastSelectedGroupId(g.id);
-    setView(
-      isMatchingGroup(g)
-        ? { name: "matching", groupId: g.id }
-        : { name: "pickMode", groupId: g.id }
-    );
+    if (isMatchingGroup(g)) {
+      setView({ name: "matching", groupId: g.id });
+      return;
+    }
+
+    if (isGrammarChoiceGroup(g)) {
+      setView({ name: "grammarChoice", groupId: g.id });
+      return;
+    }
+
+    setView({ name: "pickMode", groupId: g.id });
   };
 
   const startFlashcards = () => {
@@ -72,7 +101,7 @@ export default function App() {
 
       {/* ===== Page content ===== */}
       <div className="page-wrap">
-        {view.name === "flashcard" && selectedGroup && (
+        {view.name === "flashcard" && selectedGroup && isWordListGroup(selectedGroup) && (
           <FlashcardSession
             key={`fc-${selectedGroup.id}-${sessionNonce}`}
             group={selectedGroup}
@@ -84,7 +113,7 @@ export default function App() {
           />
         )}
 
-        {view.name === "spelling" && selectedGroup && (
+        {view.name === "spelling" && selectedGroup && isWordListGroup(selectedGroup) && (
           <SpellingSession
             key={`sp-${selectedGroup.id}-${sessionNonce}`}
             group={selectedGroup}
@@ -96,7 +125,7 @@ export default function App() {
           />
         )}
 
-        {view.name === "matching" && selectedGroup && (
+        {view.name === "matching" && selectedGroup && isMatchingGroup(selectedGroup) && (
           <MatchingSession
             key={`mt-${selectedGroup.id}-${sessionNonce}`}
             group={selectedGroup}
@@ -106,7 +135,17 @@ export default function App() {
           />
         )}
 
-        {view.name === "pickMode" && selectedGroup && (
+        {view.name === "grammarChoice" && selectedGroup && isGrammarChoiceGroup(selectedGroup) && (
+          <GrammarChoiceSession
+            key={`gc-${selectedGroup.id}-${sessionNonce}`}
+            group={selectedGroup}
+            onRepeatSame={() => setSessionNonce((n) => n + 1)}
+            onChangeGroup={goHome}
+            onHome={goHome}
+          />
+        )}
+
+        {view.name === "pickMode" && selectedGroup && isWordListGroup(selectedGroup) && (
           <div className="app column">
             <header className="app-head">
               <h1 className="title">בחר מצב תרגול</h1>
@@ -144,6 +183,7 @@ export default function App() {
                   const fc = p?.flashcard;
                   const sp = p?.spelling;
                   const mt = p?.matching;
+                  const gc = p?.grammarChoice;
                   return (
                     <li key={g.id}>
                       <button
@@ -153,10 +193,9 @@ export default function App() {
                       >
                         <span className="group-title">{g.title}</span>
                         <span className="group-meta">
-                          {g.words.length} מילים
-                          {isMatchingGroup(g) ? " · חיבור תרגומים" : ""}
+                          {groupMeta(g)}
                         </span>
-                        {(fc || sp || mt) && (
+                        {(fc || sp || mt || gc) && (
                           <span className="group-scores">
                             {fc && (
                               <ScoreBadge
@@ -177,6 +216,13 @@ export default function App() {
                                 label="חיבורים"
                                 score={mt.lastScoreNumerator}
                                 total={mt.lastScoreDenominator}
+                              />
+                            )}
+                            {gc && (
+                              <ScoreBadge
+                                label="דקדוק"
+                                score={gc.lastScoreNumerator}
+                                total={gc.lastScoreDenominator}
                               />
                             )}
                           </span>

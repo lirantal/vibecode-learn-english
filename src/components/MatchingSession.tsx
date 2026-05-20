@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import type { Word, WordGroup } from "../types";
+import type { MatchingGroup, Word } from "../types";
 import { updateGroupModeStats } from "../lib/storage";
 
 type Props = {
-  group: WordGroup;
+  group: MatchingGroup;
   onRepeatSame: () => void;
   onChangeGroup: () => void;
   onHome: () => void;
