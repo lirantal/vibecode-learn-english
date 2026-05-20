@@ -15,6 +15,106 @@
         { "en": "Middle", "he": "אמצע" },
         { "en": "Moment", "he": "רגע" }
       ]
+    },
+    {
+      "id": "sample-grade7-02",
+      "title": "מילים — שבוע 2",
+      "words": [
+        { "en": "All sorts of", "he": "כל מיני" },
+        { "en": "Grow up", "he": "לגדול, להתבגר" },
+        { "en": "Most", "he": "רוב" },
+        { "en": "Reading", "he": "קריאה" },
+        { "en": "Walk", "he": "טיול רגלי, הליכה" },
+        { "en": "Alone", "he": "לבד" },
+        { "en": "Job", "he": "עבודה, תפקיד" },
+        { "en": "Online", "he": "באינטרנט" },
+        { "en": "Remind", "he": "להזכיר" },
+        { "en": "While", "he": "בזמן, כאשר" },
+        { "en": "Except for", "he": "חוץ מ-" },
+        { "en": "Join", "he": "להצטרף" },
+        { "en": "Pick something up", "he": "להרים (משהו)" },
+        { "en": "Soap", "he": "סבון" }
+      ]
+    },
+    {
+      "id": "sample-grade7-03",
+      "title": "מילים — שבוע 3",
+      "words": [
+        { "en": "As ... as", "he": "כמו" },
+        { "en": "Imagine", "he": "לדמיין" },
+        { "en": "Police officer", "he": "שוטר/ת" },
+        { "en": "Spare time", "he": "זמן פנוי, פנאי" },
+        { "en": "Dream", "he": "חלום" },
+        { "en": "Helicopter", "he": "מסוק" },
+        { "en": "Model", "he": "דגם" },
+        { "en": "Project", "he": "פרויקט, מיזם" },
+        { "en": "Very much", "he": "מאוד" },
+        { "en": "During", "he": "במשך" },
+        { "en": "Huge", "he": "ענק" },
+        { "en": "Piece", "he": "חלק, חתיכה" },
+        { "en": "Size", "he": "גודל, מידה" }
+      ]
+    },
+    {
+      "id": "sample-grade7-04",
+      "title": "מילים — שבוע 4",
+      "words": [
+        { "en": "Badly", "he": "קשה, מאוד" },
+        { "en": "Die", "he": "למות" },
+        { "en": "Let", "he": "להרשות" },
+        { "en": "Person", "he": "אדם" },
+        { "en": "Type", "he": "סוג" },
+        { "en": "Close", "he": "קרוב" },
+        { "en": "Engine", "he": "מנוע" },
+        { "en": "Life", "he": "חיים" },
+        { "en": "Possible", "he": "אפשרי" },
+        { "en": "University", "he": "אוניברסיטה" },
+        { "en": "Danger", "he": "סכנה" },
+        { "en": "Had", "he": "היה (ל-)" },
+        { "en": "Once", "he": "פעם" },
+        { "en": "Speaker", "he": "נואם" },
+        { "en": "Went", "he": "הלך" }
+      ]
+    },
+    {
+      "id": "sample-grade7-05",
+      "title": "מילים — שבוע 5",
+      "words": [
+        { "en": "Away", "he": "למקום אחר" },
+        { "en": "Country", "he": "אזור כפרי" },
+        { "en": "Field", "he": "שדה" },
+        { "en": "Middle", "he": "אמצע" },
+        { "en": "Mrs.", "he": "גברת" },
+        { "en": "Come back", "he": "לחזור" },
+        { "en": "Either", "he": "או, גם" },
+        { "en": "Hate", "he": "לשנוא" },
+        { "en": "Moment", "he": "רגע" },
+        { "en": "Pack", "he": "לארוז" },
+        { "en": "Cook (n)", "he": "טבח" },
+        { "en": "Feed", "he": "להאכיל" },
+        { "en": "Look after", "he": "לטפל ב-" },
+        { "en": "Mr.", "he": "מר" },
+        { "en": "Worker", "he": "עובד, פועל" }
+      ]
+    },
+    {
+      "id": "sample-grade7-06",
+      "title": "מילים — שבוע 6",
+      "words": [
+        { "en": "Along", "he": "לאורך" },
+        { "en": "Explain", "he": "להסביר" },
+        { "en": "No one", "he": "אף אחד" },
+        { "en": "Pleasant", "he": "נעים" },
+        { "en": "Till", "he": "עד ש-" },
+        { "en": "Countryside", "he": "אזור כפרי" },
+        { "en": "Extra", "he": "נוסף" },
+        { "en": "No problem", "he": "אין בעיה" },
+        { "en": "Surprised", "he": "מופתע" },
+        { "en": "Decision", "he": "החלטה" },
+        { "en": "Happy to do something", "he": "שמח לעשות (משהו)" },
+        { "en": "Pay", "he": "לשלם" },
+        { "en": "Through", "he": "דרך" }
+      ]
     }
   ]
 }
