@@ -88,6 +88,16 @@ body {
   background: var(--surface2);
 }
 
+.navbar .btn-install {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--primary);
+}
+
+.navbar .btn-install:active {
+  background: rgba(56, 189, 248, 0.2);
+}
+
 /* ===== Page wrapper ===== */
 .page-wrap {
   flex: 1;
@@ -157,6 +167,48 @@ body {
 
 .main-pad {
   padding-top: 8px;
+}
+
+.install-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.install-notice--info {
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--primary);
+}
+
+.install-notice--success {
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--success);
+}
+
+.install-notice__close {
+  width: 28px;
+  height: 28px;
+  margin: -4px 0 -4px;
+  margin-inline-start: auto;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: currentColor;
+  font: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.install-notice__close:active {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .progress {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type {
   AppView,
   GrammarChoiceGroup,
@@ -16,6 +16,32 @@ import StoryClozeSession from "./components/StoryClozeSession";
 import { loadProgress, setLastSelectedGroupId } from "./lib/storage";
 
 const data = wordGroupsData.groups as WordGroup[];
+
+type BeforeInstallPromptChoice = {
+  outcome: "accepted" | "dismissed";
+  platform: string;
+};
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<BeforeInstallPromptChoice>;
+}
+
+type InstallNotice = {
+  tone: "info" | "success";
+  text: string;
+};
+
+function isIosDevice(): boolean {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
+function isStandaloneDisplay(): boolean {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    Boolean((navigator as Navigator & { standalone?: boolean }).standalone)
+  );
+}
 
 function ScoreBadge({ label, score, total }: { label: string; score: number; total: number }) {
   const pct = total > 0 ? score / total : 0;
@@ -63,6 +89,10 @@ function groupMeta(group: WordGroup): string {
 export default function App() {
   const [view, setView] = useState<AppView>({ name: "home" });
   const [sessionNonce, setSessionNonce] = useState(0);
+  const [installPrompt, setInstallPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(isStandaloneDisplay);
+  const [installNotice, setInstallNotice] = useState<InstallNotice | null>(null);
   const progress = useMemo(() => loadProgress(), [view, sessionNonce]);
 
   const selectedGroup =
@@ -101,12 +131,81 @@ export default function App() {
   const goHome = () => setView({ name: "home" });
 
   const isHome = view.name === "home";
+  const showInstallButton = isHome && !isInstalled;
+
+  useEffect(() => {
+    const displayModeQuery = window.matchMedia("(display-mode: standalone)");
+    const updateInstallState = () => {
+      if (isStandaloneDisplay()) {
+        setIsInstalled(true);
+        setInstallPrompt(null);
+        setInstallNotice(null);
+      }
+    };
+
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+    };
+
+    const handleInstalled = () => {
+      setIsInstalled(true);
+      setInstallPrompt(null);
+      setInstallNotice({
+        tone: "success",
+        text: "האפליקציה הותקנה בהצלחה במסך הבית.",
+      });
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleInstalled);
+    displayModeQuery.addEventListener("change", updateInstallState);
+    updateInstallState();
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener("appinstalled", handleInstalled);
+      displayModeQuery.removeEventListener("change", updateInstallState);
+    };
+  }, []);
+
+  const installApp = async () => {
+    if (installPrompt) {
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      setInstallPrompt(null);
+
+      if (choice.outcome === "accepted") {
+        setInstallNotice({
+          tone: "success",
+          text: "מעולה, האפליקציה תופיע במסך הבית לאחר סיום ההתקנה.",
+        });
+      }
+      return;
+    }
+
+    setInstallNotice({
+      tone: "info",
+      text: isIosDevice()
+        ? "ב-iPhone או iPad: לחצו על כפתור השיתוף בדפדפן ואז על \"הוסף למסך הבית\"."
+        : "אם לא נפתח חלון התקנה, פתחו את תפריט הדפדפן ובחרו \"התקנת אפליקציה\" או \"הוספה למסך הבית\".",
+    });
+  };
 
   return (
     <>
       {/* ===== Navbar ===== */}
       <nav className="navbar">
         <h1 className="navbar-title">תרגול אנגלית</h1>
+        {showInstallButton && (
+          <button
+            type="button"
+            className="btn-nav btn-install"
+            onClick={installApp}
+          >
+            התקנה
+          </button>
+        )}
         {!isHome && (
           <button type="button" className="btn-nav" onClick={goHome}>
             ← תפריט ראשי
@@ -201,6 +300,22 @@ export default function App() {
               <h1 className="title">בחר קבוצת מילים</h1>
               <p className="subtitle">בחר קבוצה ותתחיל לתרגל</p>
             </header>
+            {installNotice && (
+              <aside
+                className={`install-notice install-notice--${installNotice.tone}`}
+                role="status"
+              >
+                <span>{installNotice.text}</span>
+                <button
+                  type="button"
+                  className="install-notice__close"
+                  aria-label="סגירת הודעת התקנה"
+                  onClick={() => setInstallNotice(null)}
+                >
+                  ×
+                </button>
+              </aside>
+            )}
             <main className="grow main-pad">
               <ul className="group-list">
                 {data.map((g) => {
