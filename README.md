@@ -21,6 +21,16 @@ pnpm run dev
 
 Opens at [http://localhost:5959](http://localhost:5959).
 
+## Social Sharing Metadata
+
+Open Graph and Twitter preview metadata are defined in [`index.html`](index.html).
+For production builds, set `VITE_SITE_URL` to the deployed origin so social
+platforms receive absolute URLs for the canonical page and `/og-image.png`:
+
+```bash
+VITE_SITE_URL=https://your-domain.example pnpm run build
+```
+
 ## Adding Words
 
 Edit [`src/data/wordGroups.json`](src/data/wordGroups.json):
