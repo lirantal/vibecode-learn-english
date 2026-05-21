@@ -163,6 +163,65 @@
       ]
     },
     {
+      "id": "possessives-my-day-01",
+      "title": "מילות שייכות — My day",
+      "exerciseType": "storyCloze",
+      "storyTitle": "My day",
+      "story": "Every morning I wake up, eat my breakfast and clean my room. My little sister has a golden fish. She feeds her fish every day. I have a little dog. Its legs are black and I feed him every day. Then we go to our school. Our school is big and nice. My teachers are wonderful. They have special ways to teach me English. Their ways are fun. After school my mom picks me up. We usually go to our house. We eat lunch and do homework. Then we come back to school and pick up my little sister. Her teacher is very nice. She always smiles and looks happy.",
+      "targetWords": ["my", "her", "its", "our", "their"],
+      "blanks": [
+        {
+          "prefix": "I live in a big house. ",
+          "suffix": " house is nice.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "My",
+          "hintHe": "הבית שייך לי."
+        },
+        {
+          "prefix": "She lives in a small house. ",
+          "suffix": " house is in the city.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "הבית שייך לה."
+        },
+        {
+          "prefix": "Ron has a dog. ",
+          "suffix": " dog is brown.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "His",
+          "hintHe": "הכלב שייך לרון."
+        },
+        {
+          "prefix": "Linda has a baby. ",
+          "suffix": " baby is one year old.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "התינוק שייך ללינדה."
+        },
+        {
+          "prefix": "The dog has black legs. ",
+          "suffix": " legs are black.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Its",
+          "hintHe": "הרגליים שייכות לכלב."
+        },
+        {
+          "prefix": "We go to school. ",
+          "suffix": " school is big.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Our",
+          "hintHe": "בית הספר שייך לנו."
+        },
+        {
+          "prefix": "My teachers have special ways. ",
+          "suffix": " ways are fun.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Their",
+          "hintHe": "הדרכים שייכות למורים."
+        }
+      ]
+    },
+    {
       "id": "grammar-present-simple-negative-01",
       "title": "דקדוק — don't / doesn't",
       "exerciseType": "grammarChoice",

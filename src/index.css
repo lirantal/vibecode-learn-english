@@ -271,8 +271,13 @@ body {
   transition: background 0.12s, transform 0.1s;
 }
 
-.btn:active {
+.btn:active:not(:disabled) {
   transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .btn.primary {
@@ -608,6 +613,130 @@ body {
     min-height: 36px;
     padding: 0 9px;
   }
+}
+
+/* ===== Story cloze ===== */
+.story-root {
+  padding-bottom: 4px;
+}
+
+.story-stage,
+.story-fill-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.story-hint {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.story-card,
+.story-fill-card {
+  background: var(--surface);
+  border: 1px solid var(--surface2);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.story-card {
+  overflow-y: auto;
+}
+
+.story-title {
+  margin: 0 0 12px;
+  color: var(--text);
+  direction: ltr;
+  text-align: center;
+  font-size: 1.1rem;
+  text-decoration: underline;
+}
+
+.story-text {
+  margin: 0;
+  color: var(--text);
+  direction: ltr;
+  text-align: left;
+  font-size: clamp(1rem, 4.2vw, 1.2rem);
+  line-height: 1.85;
+}
+
+.story-word {
+  display: inline;
+  min-height: 32px;
+  margin: 0 1px;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.story-word:focus-visible {
+  outline: 3px solid rgba(56, 189, 248, 0.45);
+  outline-offset: 2px;
+}
+
+.story-word--found {
+  border-color: rgba(34, 197, 94, 0.65);
+  background: rgba(34, 197, 94, 0.18);
+  color: var(--success);
+  font-weight: 800;
+}
+
+.story-word--wrong {
+  border-color: rgba(248, 113, 113, 0.75);
+  background: rgba(248, 113, 113, 0.18);
+  color: var(--danger);
+}
+
+.story-word:disabled {
+  cursor: default;
+}
+
+.story-fill-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.story-fill-sentence {
+  margin: 0;
+  direction: ltr;
+  text-align: left;
+  color: var(--text);
+  font-size: clamp(1.1rem, 5vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.story-blank {
+  display: inline-flex;
+  min-width: 64px;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.story-fill-hint {
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.story-choice-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  direction: ltr;
+}
+
+.story-choice {
+  min-width: 68px;
 }
 
 /* ===== Matching ===== */

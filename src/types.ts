@@ -10,6 +10,14 @@ export type GrammarChoiceSentence = {
   correctChoice: string;
 };
 
+export type StoryClozeBlank = {
+  prefix: string;
+  suffix: string;
+  choices: string[];
+  correctChoice: string;
+  hintHe?: string;
+};
+
 export type WordListGroup = {
   id: string;
   title: string;
@@ -31,13 +39,23 @@ export type GrammarChoiceGroup = {
   sentences: GrammarChoiceSentence[];
 };
 
-export type WordGroup = WordListGroup | MatchingGroup | GrammarChoiceGroup;
+export type StoryClozeGroup = {
+  id: string;
+  title: string;
+  exerciseType: "storyCloze";
+  storyTitle: string;
+  story: string;
+  targetWords: string[];
+  blanks: StoryClozeBlank[];
+};
+
+export type WordGroup = WordListGroup | MatchingGroup | GrammarChoiceGroup | StoryClozeGroup;
 
 export type WordGroupsFile = {
   groups: WordGroup[];
 };
 
-export type PracticeMode = "flashcard" | "spelling" | "matching" | "grammarChoice";
+export type PracticeMode = "flashcard" | "spelling" | "matching" | "grammarChoice" | "storyCloze";
 
 export type ModeStats = {
   lastRunAt: string;
@@ -51,6 +69,7 @@ export type GroupProgress = {
   spelling?: ModeStats;
   matching?: ModeStats;
   grammarChoice?: ModeStats;
+  storyCloze?: ModeStats;
 };
 
 export type StoredProgress = {
@@ -65,4 +84,5 @@ export type AppView =
   | { name: "flashcard"; groupId: string }
   | { name: "spelling"; groupId: string }
   | { name: "matching"; groupId: string }
-  | { name: "grammarChoice"; groupId: string };
+  | { name: "grammarChoice"; groupId: string }
+  | { name: "storyCloze"; groupId: string };

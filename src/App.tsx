@@ -3,6 +3,7 @@ import type {
   AppView,
   GrammarChoiceGroup,
   MatchingGroup,
+  StoryClozeGroup,
   WordGroup,
   WordListGroup,
 } from "./types";
@@ -11,6 +12,7 @@ import FlashcardSession from "./components/FlashcardSession";
 import GrammarChoiceSession from "./components/GrammarChoiceSession";
 import MatchingSession from "./components/MatchingSession";
 import SpellingSession from "./components/SpellingSession";
+import StoryClozeSession from "./components/StoryClozeSession";
 import { loadProgress, setLastSelectedGroupId } from "./lib/storage";
 
 const data = wordGroupsData.groups as WordGroup[];
@@ -38,6 +40,10 @@ function isGrammarChoiceGroup(group: WordGroup): group is GrammarChoiceGroup {
   return group.exerciseType === "grammarChoice";
 }
 
+function isStoryClozeGroup(group: WordGroup): group is StoryClozeGroup {
+  return group.exerciseType === "storyCloze";
+}
+
 function isWordListGroup(group: WordGroup): group is WordListGroup {
   return group.exerciseType === undefined || group.exerciseType === "standard";
 }
@@ -45,6 +51,10 @@ function isWordListGroup(group: WordGroup): group is WordListGroup {
 function groupMeta(group: WordGroup): string {
   if (isGrammarChoiceGroup(group)) {
     return `${group.sentences.length} משפטים · דקדוק`;
+  }
+
+  if (isStoryClozeGroup(group)) {
+    return `${group.blanks.length} השלמות · סיפור + דקדוק`;
   }
 
   return `${group.words.length} מילים${isMatchingGroup(group) ? " · חיבור תרגומים" : ""}`;
@@ -67,6 +77,11 @@ export default function App() {
 
     if (isGrammarChoiceGroup(g)) {
       setView({ name: "grammarChoice", groupId: g.id });
+      return;
+    }
+
+    if (isStoryClozeGroup(g)) {
+      setView({ name: "storyCloze", groupId: g.id });
       return;
     }
 
@@ -145,6 +160,16 @@ export default function App() {
           />
         )}
 
+        {view.name === "storyCloze" && selectedGroup && isStoryClozeGroup(selectedGroup) && (
+          <StoryClozeSession
+            key={`sc-${selectedGroup.id}-${sessionNonce}`}
+            group={selectedGroup}
+            onRepeatSame={() => setSessionNonce((n) => n + 1)}
+            onChangeGroup={goHome}
+            onHome={goHome}
+          />
+        )}
+
         {view.name === "pickMode" && selectedGroup && isWordListGroup(selectedGroup) && (
           <div className="app column">
             <header className="app-head">
@@ -184,6 +209,7 @@ export default function App() {
                   const sp = p?.spelling;
                   const mt = p?.matching;
                   const gc = p?.grammarChoice;
+                  const sc = p?.storyCloze;
                   return (
                     <li key={g.id}>
                       <button
@@ -195,7 +221,7 @@ export default function App() {
                         <span className="group-meta">
                           {groupMeta(g)}
                         </span>
-                        {(fc || sp || mt || gc) && (
+                        {(fc || sp || mt || gc || sc) && (
                           <span className="group-scores">
                             {fc && (
                               <ScoreBadge
@@ -223,6 +249,13 @@ export default function App() {
                                 label="דקדוק"
                                 score={gc.lastScoreNumerator}
                                 total={gc.lastScoreDenominator}
+                              />
+                            )}
+                            {sc && (
+                              <ScoreBadge
+                                label="סיפור"
+                                score={sc.lastScoreNumerator}
+                                total={sc.lastScoreDenominator}
                               />
                             )}
                           </span>

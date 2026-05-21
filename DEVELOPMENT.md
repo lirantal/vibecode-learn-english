@@ -8,6 +8,7 @@ A mobile-first web app for practicing English vocabulary and grammar. Designed f
 2. **Spell the English word** when hearing it (spelling mode with TTS + Wordle-style feedback)
 3. **Connect English words to Hebrew translations** (matching mode for dedicated word groups)
 4. **Choose the correct grammar word** inside English sentences (grammar-choice mode)
+5. **Find grammar words in a story and complete blanks from context** (story-cloze mode)
 
 ## Tech Stack
 
@@ -46,6 +47,7 @@ No backend. Fully static — word data ships with the bundle.
         ├── GrammarChoiceSession.tsx
         ├── MatchingSession.tsx
         ├── SpellingSession.tsx
+        ├── StoryClozeSession.tsx
         └── OnScreenKeyboard.tsx
 ```
 
@@ -58,6 +60,7 @@ Home (pick group) → Pick Mode → Flashcard Session → Summary
                               → Spelling Session  → Summary
                   → Matching Session → Summary (for matching-only groups)
                   → Grammar Choice Session → Summary (for grammar-only groups)
+                  → Story Cloze Session → Summary (for story-cloze groups)
 ```
 
 A persistent **navbar** at the top allows returning home from any screen.
@@ -103,15 +106,42 @@ For grammar-choice groups:
 }
 ```
 
+For story-cloze groups:
+
+```json
+{
+  "groups": [
+    {
+      "id": "possessives-my-day-01",
+      "title": "מילות שייכות — My day",
+      "exerciseType": "storyCloze",
+      "storyTitle": "My day",
+      "story": "Every morning I wake up...",
+      "targetWords": ["my", "her", "its", "our", "their"],
+      "blanks": [
+        {
+          "prefix": "I live in a big house. ",
+          "suffix": " house is nice.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "My",
+          "hintHe": "הבית שייך לי."
+        }
+      ]
+    }
+  ]
+}
+```
+
 Rules:
 - `id` must be unique across groups.
-- `exerciseType` is optional. Omit it for standard flashcard + spelling groups; set `"matching"` for groups that should open the connection exercise only; set `"grammarChoice"` for grammar sentence groups.
+- `exerciseType` is optional. Omit it for standard flashcard + spelling groups; set `"matching"` for groups that should open the connection exercise only; set `"grammarChoice"` for grammar sentence groups; set `"storyCloze"` for story + fill-in groups.
 - `en` is used for TTS pronunciation, spelling slots, and display on the flashcard front.
 - `he` is the Hebrew meaning shown on the flashcard back.
 - Multi-word phrases are supported — spaces become gaps in the spelling grid.
 - Grammar-choice groups use `sentences` instead of `words`. Each sentence has `prefix`, two `choices`, `suffix`, and `correctChoice`.
 - Grammar-choice banks can contain more than 5 sentences, but each run samples 5 sentences for the portrait mobile layout.
 - Chart-style grammar worksheets can be adapted by expanding each subject + verb phrase combination into a `sentences[]` item.
+- Story-cloze groups use `story`, `targetWords`, and `blanks` instead of `words`. The story phase asks the student to find every occurrence of the target words in the story; the fill-in phase scores the blanks by first try.
 - Vite picks up changes via HMR (no restart needed in dev).
 
 ## Practice Modes
@@ -152,6 +182,16 @@ Rules:
 - Correct choices turn green, stay locked, and count the sentence as complete.
 - Score is first-try based: a sentence only counts correct if the first selected choice was correct. Sentences missed at least once go on the "practice more" list.
 
+### Story Cloze
+
+- Available for groups with `"exerciseType": "storyCloze"`.
+- Starts with an English story. The student taps target grammar words in the story, such as possessive adjectives.
+- Found target words stay green; wrong story taps briefly flash red. The story phase is guided noticing practice and does not affect the final score.
+- The fill-in phase shows one sentence at a time with a choice bank. English story and sentence content are explicitly LTR inside the RTL app shell.
+- Wrong choices turn red, lock the item briefly for 1 second, then reset so the student can try again.
+- Correct choices turn green, then the session advances to the next blank.
+- Score is first-try based: a blank only counts correct if the first selected choice was correct. Blanks missed at least once go on the "practice more" list.
+
 ## Persistence
 
 Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
@@ -164,7 +204,8 @@ Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
       flashcard?: { lastRunAt, lastScoreNumerator, lastScoreDenominator, lastWeakEn[] },
       spelling?: { same shape },
       matching?: { same shape },
-      grammarChoice?: { same shape }
+      grammarChoice?: { same shape },
+      storyCloze?: { same shape }
     }
   },
   lastSelectedGroupId?: string
@@ -173,7 +214,7 @@ Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
 
 All read/write goes through `src/lib/storage.ts` — swap to `localStorage` there if cross-session persistence is desired.
 
-Spelling, matching, and grammar-choice modes persist progress during the run, not just at the final summary. This means partial scores appear on the home screen even if the user navigates away mid-session via the navbar.
+Spelling, matching, grammar-choice, and story-cloze modes persist progress during the run, not just at the final summary. This means partial scores appear on the home screen even if the user navigates away mid-session via the navbar.
 
 ## Styling Conventions
 
@@ -183,6 +224,7 @@ Spelling, matching, and grammar-choice modes persist progress during the run, no
 - **No CSS framework** — all styles in `src/index.css`.
 - On-screen keyboard and letter grid are always `direction: ltr`.
 - Grammar-choice sentences, choices, and summaries that show English sentences are explicitly `direction: ltr`.
+- Story-cloze story text, fill-in sentences, choice banks, and summaries that show English sentences are explicitly `direction: ltr`.
 
 ## Home Screen Score Badges
 
@@ -198,7 +240,7 @@ Each badge shows the mode name and the fraction (e.g. "כרטיסיות 8/10").
 1. **No router** — simple state in `App.tsx` is enough for the small set of app views.
 2. **Shuffle per session** — word order is randomized each time a practice session starts.
 3. **Wordle feedback** — motivates correct spelling through visual hints without giving away the answer.
-4. **First-try scoring for choice modes** — matching and grammar-choice exercises let the student recover from mistakes while still marking missed items for more practice.
+4. **First-try scoring for choice modes** — matching, grammar-choice, and story-cloze exercises let the student recover from mistakes while still marking missed items for more practice.
 5. **`sessionStorage` over cookies/localStorage** — scores reset on tab close so the kid re-practices regularly. Easy to change.
 6. **On-screen keyboard** — ensures the kid can practice on mobile without fighting the OS keyboard language.
 
@@ -208,6 +250,7 @@ Each badge shows the mode name and the fraction (e.g. "כרטיסיות 8/10").
 |------|-----|
 | Add a new word group | Edit `src/data/wordGroups.json`, add object to `groups[]` |
 | Add a grammar exercise | Add a group with `"exerciseType": "grammarChoice"` and 5 sentence objects in `sentences[]` |
+| Add a story cloze exercise | Add a group with `"exerciseType": "storyCloze"`, `story`, `targetWords`, and `blanks[]` |
 | Change TTS voice/lang | Edit `src/lib/tts.ts` |
 | Adjust weak threshold | Change `WEAK_TRY_THRESHOLD` in `SpellingSession.tsx` |
 | Switch to localStorage | Change `sessionStorage` → `localStorage` in `src/lib/storage.ts` |
