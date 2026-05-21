@@ -2,7 +2,7 @@
 
 ## What Is This Project?
 
-A mobile-first English vocabulary and grammar practice app for Hebrew-speaking students. Built with Vite + React + TypeScript. No backend, no database — everything runs in the browser.
+A mobile-first English vocabulary and grammar practice app for Hebrew-speaking students. Built with Vite + React + TypeScript. No backend, no database — everything runs in the browser. Production builds are installable PWAs.
 
 ## Quick Start
 
@@ -17,6 +17,8 @@ Production build:
 pnpm run build    # outputs to dist/
 pnpm run preview  # preview production build
 ```
+
+Production builds should emit `dist/site.webmanifest`, `dist/sw.js`, and Workbox assets through `vite-plugin-pwa`.
 
 ## Environment
 
@@ -34,6 +36,9 @@ pnpm run preview  # preview production build
 - No component library — plain React components.
 - State management is local React state (useState/useRef). No Redux, no Zustand.
 - Navigation is state-driven in `App.tsx`, not a router.
+- PWA manifest/service worker config lives in `vite.config.ts`; `src/main.tsx` registers the generated service worker.
+- The home navbar install button text is `התקן אפליקציה`. Chromium browsers use the native install prompt; iOS falls back to Hebrew Add to Home Screen instructions.
+- Progress persistence is centralized in `src/lib/storage.ts`. It reads/merges `localStorage`, `sessionStorage`, and memory fallback data; do not access browser storage directly from components.
 
 ## File to Edit for Word Content
 

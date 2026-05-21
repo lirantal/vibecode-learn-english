@@ -8,7 +8,8 @@ A mobile-first web app for Hebrew-speaking students to practice English vocabula
 - **Spelling** — hear the word via text-to-speech, type it out with Wordle-style feedback
 - **Translation matching** — connect English words to their Hebrew translations in dedicated matching groups
 - **Grammar choice** — choose the correct grammar word inside English sentences, with red retry feedback and green locked-in answers
-- **Score tracking** — color-coded badges show your progress per word group
+- **Score tracking** — color-coded badges show your progress per word group and persist across browser/app sessions
+- **Installable PWA** — generated web manifest, service worker caching, mobile home-screen install support, and an in-app install button
 - **On-screen QWERTY keyboard** — practice on mobile without switching OS language
 - **Extensible word lists** — add new groups by editing a single JSON file
 
@@ -30,6 +31,12 @@ platforms receive absolute URLs for the canonical page and `/og-image.png`:
 ```bash
 VITE_SITE_URL=https://your-domain.example pnpm run build
 ```
+
+## PWA Install Support
+
+Production builds generate a PWA manifest and service worker via [`vite-plugin-pwa`](vite.config.ts). The app can be installed to a mobile home screen from supported browsers, and the home screen shows an `התקן אפליקציה` button when the app is not already running standalone.
+
+Android/desktop Chromium browsers can open the native install prompt. iOS Safari does not expose a programmatic install prompt, so the same button shows Hebrew instructions for using Share → Add to Home Screen.
 
 ## Adding Words
 
@@ -76,7 +83,7 @@ Changes are picked up instantly via hot-reload.
 
 ## Tech
 
-Vite + React + TypeScript. No backend. All data and scores live in the browser.
+Vite + React + TypeScript with PWA generation through `vite-plugin-pwa`. No backend. All data and scores live in the browser, with progress stored through durable browser storage and fallbacks.
 
 ## License
 

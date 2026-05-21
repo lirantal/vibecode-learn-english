@@ -18,28 +18,34 @@ A mobile-first web app for practicing English vocabulary and grammar. Designed f
 | Bundler    | Vite 6                              |
 | Styling    | Plain CSS (variables, mobile-first) |
 | TTS        | Web Speech API (`SpeechSynthesis`)  |
-| Persistence| `sessionStorage` (browser-only)     |
+| PWA        | `vite-plugin-pwa` + Workbox         |
+| Persistence| Browser storage with fallbacks      |
 | Package mgr| pnpm                                |
 
-No backend. Fully static — word data ships with the bundle.
+No backend. Fully static — word data ships with the bundle, and production builds emit installable PWA assets.
 
 ## Directory Structure
 
 ```
-├── index.html              # Entry HTML (RTL, Hebrew lang)
+├── index.html              # Entry HTML (RTL, Hebrew lang, SEO/social metadata)
 ├── package.json
-├── vite.config.ts          # Dev server on port 5959, host: true
+├── vite.config.ts          # Dev server + generated PWA manifest/service worker
 ├── tsconfig.json
+├── public/
+│   ├── favicon.svg
+│   ├── icon-192.png        # PWA install icon
+│   ├── icon-512.png        # PWA install icon
+│   └── og-image.png        # Social sharing preview
 └── src/
-    ├── main.tsx            # React root
-    ├── App.tsx             # Top-level router (state-driven views)
+    ├── main.tsx            # React root + service worker registration
+    ├── App.tsx             # Top-level router + install prompt UI
     ├── types.ts            # Shared TypeScript types
     ├── index.css           # All styles (mobile-first, RTL)
     ├── vite-env.d.ts
     ├── data/
     │   └── wordGroups.json # THE word list file to edit
     ├── lib/
-    │   ├── storage.ts      # sessionStorage read/write
+    │   ├── storage.ts      # Progress persistence + fallbacks
     │   ├── tts.ts          # Web Speech TTS helpers
     │   └── normalize.ts    # String comparison + Wordle feedback
     └── components/
@@ -64,6 +70,22 @@ Home (pick group) → Pick Mode → Flashcard Session → Summary
 ```
 
 A persistent **navbar** at the top allows returning home from any screen.
+
+On the home screen, the navbar also shows `התקן אפליקציה` when the app is not already installed/running standalone. Supported Chromium browsers use the native PWA install prompt. iOS Safari and unsupported browsers fall back to Hebrew instructions for adding the app to the home screen manually.
+
+## PWA Behavior
+
+PWA support is generated during production builds with `vite-plugin-pwa` in `vite.config.ts`:
+
+- `manifestFilename: "site.webmanifest"` emits the install manifest at build time.
+- `registerType: "autoUpdate"` keeps the service worker updated.
+- `src/main.tsx` calls `registerSW({ immediate: true })`.
+- Manifest metadata is Hebrew/RTL and uses `display: "standalone"`.
+- Required install icons live in `public/icon-192.png` and `public/icon-512.png`; favicon and Apple touch icons are also included.
+
+The source HTML should not include a static manifest link. The PWA plugin injects the manifest link into built `index.html`, which avoids duplicate manifest tags.
+
+Use `pnpm run build` to verify PWA generation. A successful production build should emit `dist/site.webmanifest`, `dist/sw.js`, and Workbox assets.
 
 ## Adding / Editing Word Groups
 
@@ -194,7 +216,19 @@ Rules:
 
 ## Persistence
 
-Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
+Progress is stored under key `vibecode-learn-english:v1`. All access goes through `src/lib/storage.ts`; components should not call browser storage APIs directly.
+
+The storage helper prefers durable browser storage but reads from every supported location so old or fallback progress is not missed:
+
+1. `localStorage` for cross-session progress.
+2. `sessionStorage` as a migration source and fallback.
+3. In-memory storage as a last resort when browser storage is unavailable or blocked.
+
+When progress is loaded, stores are merged by group and practice mode. If the same mode exists in multiple stores, the record with the newest `lastRunAt` wins. The merged result is then saved back to every available storage area, which migrates older session-only progress forward.
+
+When browser storage is writable, `storage.ts` also requests persistent origin storage via `navigator.storage.persist?.()`. Browsers may deny or ignore this request, so the app must still work with the local/session/memory fallback chain.
+
+Stored structure:
 
 ```typescript
 {
@@ -211,8 +245,6 @@ Uses `sessionStorage` under key `vibecode-learn-english:v1`. Structure:
   lastSelectedGroupId?: string
 }
 ```
-
-All read/write goes through `src/lib/storage.ts` — swap to `localStorage` there if cross-session persistence is desired.
 
 Spelling, matching, grammar-choice, and story-cloze modes persist progress during the run, not just at the final summary. This means partial scores appear on the home screen even if the user navigates away mid-session via the navbar.
 
@@ -241,8 +273,9 @@ Each badge shows the mode name and the fraction (e.g. "כרטיסיות 8/10").
 2. **Shuffle per session** — word order is randomized each time a practice session starts.
 3. **Wordle feedback** — motivates correct spelling through visual hints without giving away the answer.
 4. **First-try scoring for choice modes** — matching, grammar-choice, and story-cloze exercises let the student recover from mistakes while still marking missed items for more practice.
-5. **`sessionStorage` over cookies/localStorage** — scores reset on tab close so the kid re-practices regularly. Easy to change.
-6. **On-screen keyboard** — ensures the kid can practice on mobile without fighting the OS keyboard language.
+5. **Installable PWA** — the app is still static/no-backend, but production builds can be installed to a mobile home screen and cached by a service worker.
+6. **Durable progress with fallbacks** — prefer `localStorage`, read/migrate old `sessionStorage`, and keep an in-memory fallback for restricted browsers.
+7. **On-screen keyboard** — ensures the kid can practice on mobile without fighting the OS keyboard language.
 
 ## Common Tasks
 
@@ -253,5 +286,6 @@ Each badge shows the mode name and the fraction (e.g. "כרטיסיות 8/10").
 | Add a story cloze exercise | Add a group with `"exerciseType": "storyCloze"`, `story`, `targetWords`, and `blanks[]` |
 | Change TTS voice/lang | Edit `src/lib/tts.ts` |
 | Adjust weak threshold | Change `WEAK_TRY_THRESHOLD` in `SpellingSession.tsx` |
-| Switch to localStorage | Change `sessionStorage` → `localStorage` in `src/lib/storage.ts` |
+| Change progress storage behavior | Edit `src/lib/storage.ts`; keep reads/writes centralized there |
+| Change PWA metadata/icons | Edit `vite.config.ts` manifest settings and assets in `public/` |
 | Change port | Update `vite.config.ts` `server.port` and `.devcontainer/devcontainer.json` `forwardPorts` |
