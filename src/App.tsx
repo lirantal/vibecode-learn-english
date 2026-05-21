@@ -203,7 +203,7 @@ export default function App() {
             className="btn-nav btn-install"
             onClick={installApp}
           >
-            התקנה
+            התקן אפליקציה
           </button>
         )}
         {!isHome && (
