@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import type {
-  AppView,
   GrammarChoiceGroup,
   MatchingGroup,
   StoryClozeGroup,
@@ -13,6 +12,7 @@ import GrammarChoiceSession from "./components/GrammarChoiceSession";
 import MatchingSession from "./components/MatchingSession";
 import SpellingSession from "./components/SpellingSession";
 import StoryClozeSession from "./components/StoryClozeSession";
+import { useAppNavigation } from "./lib/appNavigation";
 import { loadProgress, setLastSelectedGroupId } from "./lib/storage";
 
 const data = wordGroupsData.groups as WordGroup[];
@@ -87,7 +87,7 @@ function groupMeta(group: WordGroup): string {
 }
 
 export default function App() {
-  const [view, setView] = useState<AppView>({ name: "home" });
+  const { view, navigate, goHome } = useAppNavigation();
   const [sessionNonce, setSessionNonce] = useState(0);
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
@@ -101,34 +101,32 @@ export default function App() {
   const pickGroup = (g: WordGroup) => {
     setLastSelectedGroupId(g.id);
     if (isMatchingGroup(g)) {
-      setView({ name: "matching", groupId: g.id });
+      navigate({ name: "matching", groupId: g.id });
       return;
     }
 
     if (isGrammarChoiceGroup(g)) {
-      setView({ name: "grammarChoice", groupId: g.id });
+      navigate({ name: "grammarChoice", groupId: g.id });
       return;
     }
 
     if (isStoryClozeGroup(g)) {
-      setView({ name: "storyCloze", groupId: g.id });
+      navigate({ name: "storyCloze", groupId: g.id });
       return;
     }
 
-    setView({ name: "pickMode", groupId: g.id });
+    navigate({ name: "pickMode", groupId: g.id });
   };
 
   const startFlashcards = () => {
     if (view.name !== "pickMode") return;
-    setView({ name: "flashcard", groupId: view.groupId });
+    navigate({ name: "flashcard", groupId: view.groupId });
   };
 
   const startSpelling = () => {
     if (view.name !== "pickMode") return;
-    setView({ name: "spelling", groupId: view.groupId });
+    navigate({ name: "spelling", groupId: view.groupId });
   };
-
-  const goHome = () => setView({ name: "home" });
 
   const isHome = view.name === "home";
   const showInstallButton = isHome && !isInstalled;
@@ -221,7 +219,7 @@ export default function App() {
             group={selectedGroup}
             onRepeatSame={() => setSessionNonce((n) => n + 1)}
             onChangeMode={() =>
-              setView({ name: "pickMode", groupId: selectedGroup.id })
+              navigate({ name: "pickMode", groupId: selectedGroup.id })
             }
             onHome={goHome}
           />
@@ -233,7 +231,7 @@ export default function App() {
             group={selectedGroup}
             onRepeatSame={() => setSessionNonce((n) => n + 1)}
             onChangeMode={() =>
-              setView({ name: "pickMode", groupId: selectedGroup.id })
+              navigate({ name: "pickMode", groupId: selectedGroup.id })
             }
             onHome={goHome}
           />
