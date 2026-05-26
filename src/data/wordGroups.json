@@ -281,6 +281,65 @@
       ]
     },
     {
+      "id": "possessives-birthday-party-03",
+      "title": "מילות שייכות — Birthday party",
+      "exerciseType": "storyCloze",
+      "storyTitle": "Birthday party",
+      "story": "On Saturday our family has a birthday party. I make my card for Grandma. You bring your guitar because you like to sing. Tom decorates his chocolate cake with blue candles. Sarah opens her gifts and puts her flowers on the table. The cat sleeps in its basket while the music plays. Our parents take pictures of everyone. The children wear party hats, and their hats are full of stars. At the end, we all clean the room together.",
+      "targetWords": ["my", "your", "his", "her", "its", "our", "their"],
+      "blanks": [
+        {
+          "prefix": "I make a card. ",
+          "suffix": " card is for Grandma.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "My",
+          "hintHe": "הכרטיס שייך לי."
+        },
+        {
+          "prefix": "You bring a guitar. ",
+          "suffix": " guitar is brown.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Your",
+          "hintHe": "הגיטרה שייכת לך."
+        },
+        {
+          "prefix": "Tom decorates a cake. ",
+          "suffix": " cake has blue candles.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "His",
+          "hintHe": "העוגה שייכת לטום."
+        },
+        {
+          "prefix": "Sarah opens gifts. ",
+          "suffix": " gifts are on the table.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "המתנות שייכות לשרה."
+        },
+        {
+          "prefix": "The cat has a basket. ",
+          "suffix": " basket is soft.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Its",
+          "hintHe": "הסל שייך לחתול."
+        },
+        {
+          "prefix": "We have a family party. ",
+          "suffix": " party is fun.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Our",
+          "hintHe": "המסיבה שייכת למשפחה שלנו."
+        },
+        {
+          "prefix": "The children wear party hats. ",
+          "suffix": " hats are full of stars.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Their",
+          "hintHe": "הכובעים שייכים לילדים."
+        }
+      ]
+    },
+    {
       "id": "grammar-present-simple-negative-01",
       "title": "דקדוק — don't / doesn't",
       "exerciseType": "grammarChoice",
