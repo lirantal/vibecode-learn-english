@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { WordListGroup } from "../types";
+import type { ScoreSnapshot, WordListGroup } from "../types";
 import {
   answersMatch,
   normalizeEn,
   wordleFeedback,
   type LetterFeedback,
 } from "../lib/normalize";
+import { makeScoreSnapshot } from "../lib/score";
 import { cancelSpeech, ensureVoicesLoaded, speakEnglish } from "../lib/tts";
 import { updateGroupModeStats } from "../lib/storage";
 import OnScreenKeyboard from "./OnScreenKeyboard";
@@ -59,11 +60,22 @@ export default function SpellingSession({
 
   const word = deck[wordIndex];
   const isLast = wordIndex >= deck.length - 1;
+  const currentScore = useCallback(
+    (): ScoreSnapshot =>
+      makeScoreSnapshot({
+        correctCount: correctRef.current,
+        completedCount: completedRef.current,
+        totalCount: deck.length,
+        errorCount: weakRef.current.length,
+      }),
+    [deck.length]
+  );
   const logActivitySession = useActivitySessionLogger({
     groupId: group.id,
     groupTitle: group.title,
     mode: "spelling",
     getItemCount: () => completedRef.current,
+    getScoreSnapshot: currentScore,
   });
 
   const filledGuess = useMemo(() => slots.join(""), [slots]);
@@ -90,25 +102,34 @@ export default function SpellingSession({
   }, [canonical]);
 
   const persist = useCallback(
-    (weak: string[], correct: number, total: number) => {
+    (weak: string[], correct: number, completed: number) => {
       updateGroupModeStats(
         group.id,
         "spelling",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: correct,
-          lastScoreDenominator: total,
+          lastScoreDenominator: deck.length,
           lastWeakEn: weak,
+          lastCompletedCount: completed,
+          lastTotalCount: deck.length,
+          lastErrorCount: weak.length,
         },
         group.id
       );
     },
-    [group.id]
+    [deck.length, group.id]
   );
 
   const goSummary = useCallback(
     (weak: string[], correct: number) => {
-      logActivitySession(deck.length);
+      const score = makeScoreSnapshot({
+        correctCount: correct,
+        completedCount: deck.length,
+        totalCount: deck.length,
+        errorCount: weak.length,
+      });
+      logActivitySession(deck.length, score);
       persist(weak, correct, deck.length);
       setWeakList(weak);
       setPhase("summary");

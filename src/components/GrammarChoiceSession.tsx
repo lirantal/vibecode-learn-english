@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { GrammarChoiceGroup, GrammarChoiceSentence } from "../types";
+import type { GrammarChoiceGroup, GrammarChoiceSentence, ScoreSnapshot } from "../types";
+import { GRAMMAR_CHOICE_ITEMS_PER_RUN, makeScoreSnapshot } from "../lib/score";
 import { updateGroupModeStats } from "../lib/storage";
 import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
@@ -9,8 +10,6 @@ type Props = {
   onChangeGroup: () => void;
   onHome: () => void;
 };
-
-const SENTENCES_PER_RUN = 5;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -36,7 +35,7 @@ export default function GrammarChoiceSession({
   onHome,
 }: Props) {
   const sentences = useMemo(
-    () => shuffle(group.sentences).slice(0, SENTENCES_PER_RUN),
+    () => shuffle(group.sentences).slice(0, GRAMMAR_CHOICE_ITEMS_PER_RUN),
     [group.sentences]
   );
   const [correctChoices, setCorrectChoices] = useState<Record<number, string>>({});
@@ -49,11 +48,28 @@ export default function GrammarChoiceSession({
   const missedSet = useMemo(() => new Set(missedIndexes), [missedIndexes]);
   const completedCount = Object.keys(correctChoices).length;
   const correctFirstTryCount = sentences.length - missedIndexes.length;
+  const snapshotFor = useCallback(
+    (
+      nextCorrectChoices: Record<number, string>,
+      nextMissedIndexes: number[]
+    ): ScoreSnapshot => {
+      const missed = new Set(nextMissedIndexes);
+      const completedIndexes = Object.keys(nextCorrectChoices).map(Number);
+      return makeScoreSnapshot({
+        correctCount: completedIndexes.filter((index) => !missed.has(index)).length,
+        completedCount: completedIndexes.length,
+        totalCount: sentences.length,
+        errorCount: missed.size,
+      });
+    },
+    [sentences.length]
+  );
   const logActivitySession = useActivitySessionLogger({
     groupId: group.id,
     groupTitle: group.title,
     mode: "grammarChoice",
     getItemCount: () => completedRef.current,
+    getScoreSnapshot: () => snapshotFor(correctChoices, missedIndexes),
   });
 
   useEffect(() => {
@@ -66,6 +82,7 @@ export default function GrammarChoiceSession({
     (nextCorrectChoices: Record<number, string>, nextMissedIndexes: number[]) => {
       const nextCompletedCount = Object.keys(nextCorrectChoices).length;
       const missed = new Set(nextMissedIndexes);
+      const score = snapshotFor(nextCorrectChoices, nextMissedIndexes);
       const weak = sentences
         .map((sentence, index) =>
           missed.has(index)
@@ -79,20 +96,23 @@ export default function GrammarChoiceSession({
         "grammarChoice",
         {
           lastRunAt: new Date().toISOString(),
-          lastScoreNumerator: sentences.length - missed.size,
+          lastScoreNumerator: score.correctCount,
           lastScoreDenominator: sentences.length,
           lastWeakEn: weak,
+          lastCompletedCount: nextCompletedCount,
+          lastTotalCount: sentences.length,
+          lastErrorCount: missed.size,
         },
         group.id
       );
 
       completedRef.current = nextCompletedCount;
       if (nextCompletedCount === sentences.length) {
-        logActivitySession(nextCompletedCount);
+        logActivitySession(nextCompletedCount, score);
         setPhase("summary");
       }
     },
-    [group.id, logActivitySession, sentences]
+    [group.id, logActivitySession, sentences, snapshotFor]
   );
 
   const clearWrongChoiceSoon = (sentenceIndex: number) => {
@@ -136,6 +156,7 @@ export default function GrammarChoiceSession({
       ? missedIndexes
       : [...missedIndexes, sentenceIndex];
     setMissedIndexes(nextMissedIndexes);
+    persist(correctChoices, nextMissedIndexes);
     setWrongChoices((current) => ({
       ...current,
       [sentenceIndex]: choice,

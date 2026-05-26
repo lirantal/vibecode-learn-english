@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import type { PracticeMode } from "../types";
+import type { PracticeMode, ScoreSnapshot } from "../types";
 import { recordActivitySession } from "../lib/storage";
 
 type ActivitySessionLoggerOptions = {
@@ -7,6 +7,7 @@ type ActivitySessionLoggerOptions = {
   groupTitle: string;
   mode: PracticeMode;
   getItemCount: () => number;
+  getScoreSnapshot?: () => ScoreSnapshot | undefined;
 };
 
 export function useActivitySessionLogger({
@@ -14,13 +15,16 @@ export function useActivitySessionLogger({
   groupTitle,
   mode,
   getItemCount,
-}: ActivitySessionLoggerOptions): (itemCount?: number) => void {
+  getScoreSnapshot,
+}: ActivitySessionLoggerOptions): (itemCount?: number, score?: ScoreSnapshot) => void {
   const loggedRef = useRef(false);
   const getItemCountRef = useRef(getItemCount);
+  const getScoreSnapshotRef = useRef(getScoreSnapshot);
   getItemCountRef.current = getItemCount;
+  getScoreSnapshotRef.current = getScoreSnapshot;
 
   const logSession = useCallback(
-    (itemCount?: number) => {
+    (itemCount?: number, score?: ScoreSnapshot) => {
       const count = itemCount ?? getItemCountRef.current();
       if (loggedRef.current || count <= 0) return;
 
@@ -30,6 +34,7 @@ export function useActivitySessionLogger({
         groupTitle,
         mode,
         itemCount: count,
+        score: score ?? getScoreSnapshotRef.current?.(),
       });
     },
     [groupId, groupTitle, mode]

@@ -1,4 +1,5 @@
-import type { ActivityLogEntry, PracticeMode } from "../types";
+import type { ActivityLogEntry, PracticeMode, ScoreSnapshot } from "../types";
+import { makeScoreSnapshot, scoreBadgeTone } from "../lib/score";
 
 type Props = {
   entries: ActivityLogEntry[];
@@ -47,6 +48,20 @@ function localDateKey(runAt: string): string {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function ScoreBadge({ score }: { score: ScoreSnapshot }) {
+  const normalized = makeScoreSnapshot(score);
+  const level = scoreBadgeTone(normalized);
+
+  return (
+    <span className={`score-badge score-badge--${level}`}>
+      <span className="score-badge__label">ציון</span>
+      <span className="score-badge__value">
+        {normalized.correctCount}/{normalized.totalCount}
+      </span>
+    </span>
+  );
 }
 
 export default function ActivityLogPage({ entries }: Props) {
@@ -99,8 +114,11 @@ export default function ActivityLogPage({ entries }: Props) {
                         </span>
                         <span className="activity-card__group">{entry.groupTitle}</span>
                       </span>
-                      <span className="activity-card__count">
-                        {entry.itemCount} בוצעו
+                      <span className="activity-card__metrics">
+                        {entry.score && <ScoreBadge score={entry.score} />}
+                        <span className="activity-card__count">
+                          {entry.itemCount} בוצעו
+                        </span>
                       </span>
                     </li>
                   ))}

@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import type {
   GrammarChoiceGroup,
+  GroupProgress,
   MatchingGroup,
+  ModeStats,
+  PracticeMode,
+  ScoreSnapshot,
   StoryClozeGroup,
   WordGroup,
   WordListGroup,
@@ -14,6 +18,7 @@ import MatchingSession from "./components/MatchingSession";
 import SpellingSession from "./components/SpellingSession";
 import StoryClozeSession from "./components/StoryClozeSession";
 import { useAppNavigation } from "./lib/appNavigation";
+import { exerciseTotalForMode, makeScoreSnapshot, scoreBadgeTone, scoreFromStats } from "./lib/score";
 import { loadProgress, setLastSelectedGroupId } from "./lib/storage";
 
 const data = wordGroupsData.groups as WordGroup[];
@@ -44,13 +49,15 @@ function isStandaloneDisplay(): boolean {
   );
 }
 
-function ScoreBadge({ label, score, total }: { label: string; score: number; total: number }) {
-  const pct = total > 0 ? score / total : 0;
-  const level = pct >= 0.8 ? "great" : pct >= 0.5 ? "ok" : "weak";
+function ScoreBadge({ label, score }: { label: string; score: ScoreSnapshot }) {
+  const normalized = makeScoreSnapshot(score);
+  const level = scoreBadgeTone(normalized);
   return (
     <span className={`score-badge score-badge--${level}`}>
       <span className="score-badge__label">{label}</span>
-      <span className="score-badge__value">{score}/{total}</span>
+      <span className="score-badge__value">
+        {normalized.correctCount}/{normalized.totalCount}
+      </span>
     </span>
   );
 }
@@ -77,7 +84,7 @@ function isWordListGroup(group: WordGroup): group is WordListGroup {
 
 function groupMeta(group: WordGroup): string {
   if (isGrammarChoiceGroup(group)) {
-    return `${group.sentences.length} משפטים · דקדוק`;
+    return `${exerciseTotalForMode(group, "grammarChoice")} משפטים · דקדוק`;
   }
 
   if (isStoryClozeGroup(group)) {
@@ -85,6 +92,66 @@ function groupMeta(group: WordGroup): string {
   }
 
   return `${group.words.length} מילים${isMatchingGroup(group) ? " · חיבור תרגומים" : ""}`;
+}
+
+type ActivityBadge = {
+  mode: PracticeMode;
+  label: string;
+  total: number;
+  stats?: ModeStats;
+};
+
+function activityBadgesForGroup(
+  group: WordGroup,
+  progress: GroupProgress | undefined
+): ActivityBadge[] {
+  if (isWordListGroup(group)) {
+    return [
+      {
+        mode: "flashcard",
+        label: "כרטיסיות",
+        total: exerciseTotalForMode(group, "flashcard"),
+        stats: progress?.flashcard,
+      },
+      {
+        mode: "spelling",
+        label: "איות",
+        total: exerciseTotalForMode(group, "spelling"),
+        stats: progress?.spelling,
+      },
+    ];
+  }
+
+  if (isMatchingGroup(group)) {
+    return [
+      {
+        mode: "matching",
+        label: "חיבורים",
+        total: exerciseTotalForMode(group, "matching"),
+        stats: progress?.matching,
+      },
+    ];
+  }
+
+  if (isGrammarChoiceGroup(group)) {
+    return [
+      {
+        mode: "grammarChoice",
+        label: "דקדוק",
+        total: exerciseTotalForMode(group, "grammarChoice"),
+        stats: progress?.grammarChoice,
+      },
+    ];
+  }
+
+  return [
+    {
+      mode: "storyCloze",
+      label: "סיפור",
+      total: exerciseTotalForMode(group, "storyCloze"),
+      stats: progress?.storyCloze,
+    },
+  ];
 }
 
 export default function App() {
@@ -343,11 +410,7 @@ export default function App() {
               <ul className="group-list">
                 {data.map((g) => {
                   const p = progress.byGroup[g.id];
-                  const fc = p?.flashcard;
-                  const sp = p?.spelling;
-                  const mt = p?.matching;
-                  const gc = p?.grammarChoice;
-                  const sc = p?.storyCloze;
+                  const activityBadges = activityBadgesForGroup(g, p);
                   return (
                     <li key={g.id}>
                       <button
@@ -359,45 +422,15 @@ export default function App() {
                         <span className="group-meta">
                           {groupMeta(g)}
                         </span>
-                        {(fc || sp || mt || gc || sc) && (
-                          <span className="group-scores">
-                            {fc && (
-                              <ScoreBadge
-                                label="כרטיסיות"
-                                score={fc.lastScoreNumerator}
-                                total={fc.lastScoreDenominator}
-                              />
-                            )}
-                            {sp && (
-                              <ScoreBadge
-                                label="איות"
-                                score={sp.lastScoreNumerator}
-                                total={sp.lastScoreDenominator}
-                              />
-                            )}
-                            {mt && (
-                              <ScoreBadge
-                                label="חיבורים"
-                                score={mt.lastScoreNumerator}
-                                total={mt.lastScoreDenominator}
-                              />
-                            )}
-                            {gc && (
-                              <ScoreBadge
-                                label="דקדוק"
-                                score={gc.lastScoreNumerator}
-                                total={gc.lastScoreDenominator}
-                              />
-                            )}
-                            {sc && (
-                              <ScoreBadge
-                                label="סיפור"
-                                score={sc.lastScoreNumerator}
-                                total={sc.lastScoreDenominator}
-                              />
-                            )}
-                          </span>
-                        )}
+                        <span className="group-scores">
+                          {activityBadges.map((badge) => (
+                            <ScoreBadge
+                              key={badge.mode}
+                              label={badge.label}
+                              score={scoreFromStats(badge.stats, badge.total)}
+                            />
+                          ))}
+                        </span>
                       </button>
                     </li>
                   );

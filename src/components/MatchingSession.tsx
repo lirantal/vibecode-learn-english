@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import type { MatchingGroup, Word } from "../types";
+import type { MatchingGroup, ScoreSnapshot, Word } from "../types";
+import { makeScoreSnapshot } from "../lib/score";
 import { updateGroupModeStats } from "../lib/storage";
 import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
@@ -91,11 +92,24 @@ export default function MatchingSession({
 
   const matchedSet = useMemo(() => new Set(matchedIds), [matchedIds]);
   const missedSet = useMemo(() => new Set(missedIds), [missedIds]);
+  const snapshotFor = useCallback(
+    (nextMatchedIds: string[], nextMissedIds: string[]): ScoreSnapshot => {
+      const missed = new Set(nextMissedIds);
+      return makeScoreSnapshot({
+        correctCount: nextMatchedIds.filter((id) => !missed.has(id)).length,
+        completedCount: nextMatchedIds.length,
+        totalCount: englishWords.length,
+        errorCount: missed.size,
+      });
+    },
+    [englishWords.length]
+  );
   const logActivitySession = useActivitySessionLogger({
     groupId: group.id,
     groupTitle: group.title,
     mode: "matching",
     getItemCount: () => completedRef.current,
+    getScoreSnapshot: () => snapshotFor(matchedIds, missedIds),
   });
 
   const measureConnection = useCallback((sourceId: string): ConnectorLine | null => {
@@ -109,12 +123,13 @@ export default function MatchingSession({
   }, []);
 
   const persist = useCallback(
-    (nextMatchedIds: string[], nextMissedIds: string[]) => {
+    (nextMatchedIds: string[], nextMissedIds: string[]): ScoreSnapshot => {
       const missed = new Set(nextMissedIds);
       const correct = nextMatchedIds.filter((id) => !missed.has(id)).length;
       const weak = englishWords
         .filter((word) => missed.has(word.id))
         .map((word) => word.en);
+      const score = snapshotFor(nextMatchedIds, nextMissedIds);
 
       updateGroupModeStats(
         group.id,
@@ -124,11 +139,16 @@ export default function MatchingSession({
           lastScoreNumerator: correct,
           lastScoreDenominator: englishWords.length,
           lastWeakEn: weak,
+          lastCompletedCount: nextMatchedIds.length,
+          lastTotalCount: englishWords.length,
+          lastErrorCount: missed.size,
         },
         group.id
       );
+
+      return score;
     },
-    [englishWords, group.id]
+    [englishWords, group.id, snapshotFor]
   );
 
   useLayoutEffect(() => {
@@ -239,9 +259,9 @@ export default function MatchingSession({
       completedRef.current = nextMatchedIds.length;
       setMatchedIds(nextMatchedIds);
       setDragging(null);
-      persist(nextMatchedIds, missedIds);
+      const score = persist(nextMatchedIds, missedIds);
       if (nextMatchedIds.length === englishWords.length) {
-        logActivitySession(nextMatchedIds.length);
+        logActivitySession(nextMatchedIds.length, score);
         setPhase("summary");
       }
       return;
@@ -254,6 +274,7 @@ export default function MatchingSession({
     const nextMissedIds = missedSet.has(sourceId) ? missedIds : [...missedIds, sourceId];
 
     setMissedIds(nextMissedIds);
+    persist(matchedIds, nextMissedIds);
     setWrongLine({ ...dragging.line, x2: wrongEnd.x, y2: wrongEnd.y });
     setDragging(null);
     clearWrongLineSoon();

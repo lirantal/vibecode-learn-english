@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { StoryClozeBlank, StoryClozeGroup } from "../types";
+import type { ScoreSnapshot, StoryClozeBlank, StoryClozeGroup } from "../types";
+import { makeScoreSnapshot } from "../lib/score";
 import { updateGroupModeStats } from "../lib/storage";
 import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
@@ -69,11 +70,28 @@ export default function StoryClozeSession({
   const missedSet = useMemo(() => new Set(missedIndexes), [missedIndexes]);
   const correctFirstTryCount = group.blanks.length - missedIndexes.length;
   const currentBlank = group.blanks[currentBlankIndex];
+  const snapshotFor = useCallback(
+    (
+      nextCorrectChoices: Record<number, string>,
+      nextMissedIndexes: number[]
+    ): ScoreSnapshot => {
+      const missed = new Set(nextMissedIndexes);
+      const completedIndexes = Object.keys(nextCorrectChoices).map(Number);
+      return makeScoreSnapshot({
+        correctCount: completedIndexes.filter((index) => !missed.has(index)).length,
+        completedCount: completedIndexes.length,
+        totalCount: group.blanks.length,
+        errorCount: missed.size,
+      });
+    },
+    [group.blanks.length]
+  );
   const logActivitySession = useActivitySessionLogger({
     groupId: group.id,
     groupTitle: group.title,
     mode: "storyCloze",
     getItemCount: () => completedRef.current,
+    getScoreSnapshot: () => snapshotFor(correctChoices, missedIndexes),
   });
 
   useEffect(() => {
@@ -88,6 +106,7 @@ export default function StoryClozeSession({
     (nextCorrectChoices: Record<number, string>, nextMissedIndexes: number[]) => {
       const nextCompletedCount = Object.keys(nextCorrectChoices).length;
       const missed = new Set(nextMissedIndexes);
+      const score = snapshotFor(nextCorrectChoices, nextMissedIndexes);
       const weak = group.blanks
         .map((blank, index) =>
           missed.has(index) ? sentenceWithChoice(blank, blank.correctChoice) : undefined
@@ -99,20 +118,23 @@ export default function StoryClozeSession({
         "storyCloze",
         {
           lastRunAt: new Date().toISOString(),
-          lastScoreNumerator: group.blanks.length - missed.size,
+          lastScoreNumerator: score.correctCount,
           lastScoreDenominator: group.blanks.length,
           lastWeakEn: weak,
+          lastCompletedCount: nextCompletedCount,
+          lastTotalCount: group.blanks.length,
+          lastErrorCount: missed.size,
         },
         group.id
       );
 
       completedRef.current = nextCompletedCount;
       if (nextCompletedCount === group.blanks.length) {
-        logActivitySession(nextCompletedCount);
+        logActivitySession(nextCompletedCount, score);
         setPhase("summary");
       }
     },
-    [group.blanks, group.id, logActivitySession]
+    [group.blanks, group.id, logActivitySession, snapshotFor]
   );
 
   const clearWrongStoryTokenSoon = (tokenIndex: number) => {
@@ -183,6 +205,7 @@ export default function StoryClozeSession({
       ? missedIndexes
       : [...missedIndexes, currentBlankIndex];
     setMissedIndexes(nextMissedIndexes);
+    persist(correctChoices, nextMissedIndexes);
     setWrongChoice(choice);
     clearWrongChoiceSoon();
   };

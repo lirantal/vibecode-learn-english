@@ -3,8 +3,10 @@ import type {
   GroupProgress,
   ModeStats,
   PracticeMode,
+  ScoreSnapshot,
   StoredProgress,
 } from "../types";
+import { makeScoreSnapshot } from "./score";
 
 const KEY = "vibecode-learn-english:v1";
 const STORAGE_TEST_KEY = `${KEY}:storage-test`;
@@ -28,6 +30,17 @@ function isPracticeMode(value: unknown): value is PracticeMode {
   );
 }
 
+function isScoreSnapshot(value: unknown): value is ScoreSnapshot {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    Number.isFinite((value as ScoreSnapshot).correctCount) &&
+    Number.isFinite((value as ScoreSnapshot).completedCount) &&
+    Number.isFinite((value as ScoreSnapshot).totalCount) &&
+    Number.isFinite((value as ScoreSnapshot).errorCount)
+  );
+}
+
 function isActivityLogEntry(value: unknown): value is ActivityLogEntry {
   return (
     typeof value === "object" &&
@@ -38,8 +51,54 @@ function isActivityLogEntry(value: unknown): value is ActivityLogEntry {
     typeof (value as ActivityLogEntry).groupTitle === "string" &&
     isPracticeMode((value as ActivityLogEntry).mode) &&
     Number.isFinite((value as ActivityLogEntry).itemCount) &&
-    (value as ActivityLogEntry).itemCount > 0
+    (value as ActivityLogEntry).itemCount > 0 &&
+    (
+      (value as ActivityLogEntry).score === undefined ||
+      isScoreSnapshot((value as ActivityLogEntry).score)
+    )
   );
+}
+
+function asCount(value: unknown): number | undefined {
+  return typeof value === "number" && Number.isFinite(value)
+    ? Math.max(0, Math.floor(value))
+    : undefined;
+}
+
+function asWeakList(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
+function normalizeStats(value: unknown): ModeStats | undefined {
+  if (typeof value !== "object" || value === null) return undefined;
+  const stats = value as ModeStats;
+  if (typeof stats.lastRunAt !== "string") return undefined;
+
+  const weak = asWeakList(stats.lastWeakEn);
+  const correct = asCount(stats.lastScoreNumerator) ?? 0;
+  const denominator = asCount(stats.lastScoreDenominator) ?? 0;
+  const errors = asCount(stats.lastErrorCount) ?? weak.length;
+
+  return {
+    lastRunAt: stats.lastRunAt,
+    lastScoreNumerator: correct,
+    lastScoreDenominator: denominator,
+    lastWeakEn: weak,
+    lastCompletedCount:
+      asCount(stats.lastCompletedCount) ?? Math.min(denominator, correct + errors),
+    lastTotalCount: asCount(stats.lastTotalCount),
+    lastErrorCount: errors,
+  };
+}
+
+function normalizeActivityLogEntry(entry: ActivityLogEntry): ActivityLogEntry {
+  return {
+    ...entry,
+    itemCount: asCount(entry.itemCount) ?? 0,
+    score: entry.score ? makeScoreSnapshot(entry.score) : undefined,
+  };
 }
 
 function isStoredProgress(value: unknown): value is StoredProgress {
@@ -103,11 +162,17 @@ function mergeGroupProgress(
   next: GroupProgress | undefined
 ): GroupProgress {
   return {
-    flashcard: newestStats(current?.flashcard, next?.flashcard),
-    spelling: newestStats(current?.spelling, next?.spelling),
-    matching: newestStats(current?.matching, next?.matching),
-    grammarChoice: newestStats(current?.grammarChoice, next?.grammarChoice),
-    storyCloze: newestStats(current?.storyCloze, next?.storyCloze),
+    flashcard: newestStats(normalizeStats(current?.flashcard), normalizeStats(next?.flashcard)),
+    spelling: newestStats(normalizeStats(current?.spelling), normalizeStats(next?.spelling)),
+    matching: newestStats(normalizeStats(current?.matching), normalizeStats(next?.matching)),
+    grammarChoice: newestStats(
+      normalizeStats(current?.grammarChoice),
+      normalizeStats(next?.grammarChoice)
+    ),
+    storyCloze: newestStats(
+      normalizeStats(current?.storyCloze),
+      normalizeStats(next?.storyCloze)
+    ),
   };
 }
 
@@ -123,7 +188,7 @@ function mergeActivityLogs(stores: StoredProgress[]): ActivityLogEntry[] {
   for (const store of stores) {
     for (const entry of store.activityLog ?? []) {
       if (isActivityLogEntry(entry)) {
-        byId.set(entry.id, entry);
+        byId.set(entry.id, normalizeActivityLogEntry(entry));
       }
     }
   }
