@@ -57,6 +57,15 @@ export type WordGroupsFile = {
 
 export type PracticeMode = "flashcard" | "spelling" | "matching" | "grammarChoice" | "storyCloze";
 
+export type ActivityLogEntry = {
+  id: string;
+  runAt: string;
+  groupId: string;
+  groupTitle: string;
+  mode: PracticeMode;
+  itemCount: number;
+};
+
 export type ModeStats = {
   lastRunAt: string;
   lastScoreNumerator: number;
@@ -75,11 +84,13 @@ export type GroupProgress = {
 export type StoredProgress = {
   version: 1;
   byGroup: Record<string, GroupProgress>;
+  activityLog?: ActivityLogEntry[];
   lastSelectedGroupId?: string;
 };
 
 export type AppView =
   | { name: "home" }
+  | { name: "activity" }
   | { name: "pickMode"; groupId: string }
   | { name: "flashcard"; groupId: string }
   | { name: "spelling"; groupId: string }

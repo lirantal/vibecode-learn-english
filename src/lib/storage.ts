@@ -1,14 +1,45 @@
-import type { GroupProgress, ModeStats, PracticeMode, StoredProgress } from "../types";
+import type {
+  ActivityLogEntry,
+  GroupProgress,
+  ModeStats,
+  PracticeMode,
+  StoredProgress,
+} from "../types";
 
 const KEY = "vibecode-learn-english:v1";
 const STORAGE_TEST_KEY = `${KEY}:storage-test`;
 const STORAGE_AREAS = ["localStorage", "sessionStorage"] as const;
+const MAX_ACTIVITY_LOG_ENTRIES = 500;
 
 let memoryStore: StoredProgress | undefined;
 let persistenceRequested = false;
 
 function emptyStore(): StoredProgress {
-  return { version: 1, byGroup: {} };
+  return { version: 1, byGroup: {}, activityLog: [] };
+}
+
+function isPracticeMode(value: unknown): value is PracticeMode {
+  return (
+    value === "flashcard" ||
+    value === "spelling" ||
+    value === "matching" ||
+    value === "grammarChoice" ||
+    value === "storyCloze"
+  );
+}
+
+function isActivityLogEntry(value: unknown): value is ActivityLogEntry {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as ActivityLogEntry).id === "string" &&
+    typeof (value as ActivityLogEntry).runAt === "string" &&
+    typeof (value as ActivityLogEntry).groupId === "string" &&
+    typeof (value as ActivityLogEntry).groupTitle === "string" &&
+    isPracticeMode((value as ActivityLogEntry).mode) &&
+    Number.isFinite((value as ActivityLogEntry).itemCount) &&
+    (value as ActivityLogEntry).itemCount > 0
+  );
 }
 
 function isStoredProgress(value: unknown): value is StoredProgress {
@@ -53,6 +84,11 @@ function statsTime(stats: ModeStats | undefined): number {
   return Number.isFinite(time) ? time : Number.NEGATIVE_INFINITY;
 }
 
+function activityTime(entry: ActivityLogEntry): number {
+  const time = Date.parse(entry.runAt);
+  return Number.isFinite(time) ? time : Number.NEGATIVE_INFINITY;
+}
+
 function newestStats(
   current: ModeStats | undefined,
   next: ModeStats | undefined
@@ -81,6 +117,22 @@ function pruneEmptyModes(group: GroupProgress): GroupProgress {
   ) as GroupProgress;
 }
 
+function mergeActivityLogs(stores: StoredProgress[]): ActivityLogEntry[] {
+  const byId = new Map<string, ActivityLogEntry>();
+
+  for (const store of stores) {
+    for (const entry of store.activityLog ?? []) {
+      if (isActivityLogEntry(entry)) {
+        byId.set(entry.id, entry);
+      }
+    }
+  }
+
+  return [...byId.values()]
+    .sort((a, b) => activityTime(b) - activityTime(a))
+    .slice(0, MAX_ACTIVITY_LOG_ENTRIES);
+}
+
 function mergeProgressStores(stores: StoredProgress[]): StoredProgress {
   const merged = emptyStore();
 
@@ -93,6 +145,8 @@ function mergeProgressStores(stores: StoredProgress[]): StoredProgress {
       );
     }
   }
+
+  merged.activityLog = mergeActivityLogs(stores);
 
   return merged;
 }
@@ -160,6 +214,24 @@ export function updateGroupModeStats(
   if (lastSelected !== undefined) {
     cur.lastSelectedGroupId = lastSelected;
   }
+  saveProgress(cur);
+}
+
+export function recordActivitySession(
+  entry: Omit<ActivityLogEntry, "id" | "runAt"> & { runAt?: string }
+): void {
+  const runAt = entry.runAt ?? new Date().toISOString();
+  const cur = loadProgress();
+  const activity: ActivityLogEntry = {
+    ...entry,
+    runAt,
+    id: `${runAt}-${entry.groupId}-${entry.mode}-${Math.random().toString(36).slice(2, 10)}`,
+  };
+
+  cur.activityLog = [activity, ...(cur.activityLog ?? [])].slice(
+    0,
+    MAX_ACTIVITY_LOG_ENTRIES
+  );
   saveProgress(cur);
 }
 

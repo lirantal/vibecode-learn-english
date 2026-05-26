@@ -7,6 +7,7 @@ import type {
   WordListGroup,
 } from "./types";
 import wordGroupsData from "./data/wordGroups.json";
+import ActivityLogPage from "./components/ActivityLogPage";
 import FlashcardSession from "./components/FlashcardSession";
 import GrammarChoiceSession from "./components/GrammarChoiceSession";
 import MatchingSession from "./components/MatchingSession";
@@ -89,14 +90,18 @@ function groupMeta(group: WordGroup): string {
 export default function App() {
   const { view, navigate, goHome } = useAppNavigation();
   const [sessionNonce, setSessionNonce] = useState(0);
+  const [progressRefreshNonce, setProgressRefreshNonce] = useState(0);
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(isStandaloneDisplay);
   const [installNotice, setInstallNotice] = useState<InstallNotice | null>(null);
-  const progress = useMemo(() => loadProgress(), [view, sessionNonce]);
+  const progress = useMemo(
+    () => loadProgress(),
+    [view, sessionNonce, progressRefreshNonce]
+  );
 
   const selectedGroup =
-    view.name === "home" ? undefined : groupById(view.groupId);
+    "groupId" in view ? groupById(view.groupId) : undefined;
 
   const pickGroup = (g: WordGroup) => {
     setLastSelectedGroupId(g.id);
@@ -129,7 +134,14 @@ export default function App() {
   };
 
   const isHome = view.name === "home";
+  const isActivity = view.name === "activity";
   const showInstallButton = isHome && !isInstalled;
+
+  useEffect(() => {
+    if (view.name === "activity") {
+      setProgressRefreshNonce((nonce) => nonce + 1);
+    }
+  }, [view.name]);
 
   useEffect(() => {
     const displayModeQuery = window.matchMedia("(display-mode: standalone)");
@@ -195,6 +207,15 @@ export default function App() {
       {/* ===== Navbar ===== */}
       <nav className="navbar">
         <h1 className="navbar-title">תרגול אנגלית</h1>
+        {!isActivity && (
+          <button
+            type="button"
+            className="btn-nav"
+            onClick={() => navigate({ name: "activity" })}
+          >
+            יומן פעילות
+          </button>
+        )}
         {showInstallButton && (
           <button
             type="button"
@@ -213,6 +234,10 @@ export default function App() {
 
       {/* ===== Page content ===== */}
       <div className="page-wrap">
+        {view.name === "activity" && (
+          <ActivityLogPage entries={progress.activityLog ?? []} />
+        )}
+
         {view.name === "flashcard" && selectedGroup && isWordListGroup(selectedGroup) && (
           <FlashcardSession
             key={`fc-${selectedGroup.id}-${sessionNonce}`}

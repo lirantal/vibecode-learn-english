@@ -310,6 +310,106 @@ body {
   border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
+/* ===== Activity log ===== */
+.activity-days,
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity-days {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.activity-day {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activity-day__date {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--primary);
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activity-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--surface2);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.activity-card__time {
+  min-width: 52px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  direction: ltr;
+  text-align: center;
+}
+
+.activity-card__body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-card__title {
+  font-weight: 700;
+}
+
+.activity-card__group {
+  color: var(--muted);
+  font-size: 0.88rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-card__count {
+  padding: 4px 10px;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 999px;
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--success);
+  font-size: 0.82rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.activity-empty {
+  padding: 20px;
+  border: 1px solid var(--surface2);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.activity-empty__title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.activity-empty__text {
+  margin: 0;
+  color: var(--muted);
+}
+
 /* ===== Buttons ===== */
 .btn {
   min-height: var(--tap);

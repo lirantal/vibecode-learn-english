@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GrammarChoiceGroup, GrammarChoiceSentence } from "../types";
 import { updateGroupModeStats } from "../lib/storage";
+import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
 type Props = {
   group: GrammarChoiceGroup;
@@ -43,10 +44,17 @@ export default function GrammarChoiceSession({
   const [missedIndexes, setMissedIndexes] = useState<number[]>([]);
   const [phase, setPhase] = useState<"run" | "summary">("run");
   const wrongTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
+  const completedRef = useRef(0);
 
   const missedSet = useMemo(() => new Set(missedIndexes), [missedIndexes]);
   const completedCount = Object.keys(correctChoices).length;
   const correctFirstTryCount = sentences.length - missedIndexes.length;
+  const logActivitySession = useActivitySessionLogger({
+    groupId: group.id,
+    groupTitle: group.title,
+    mode: "grammarChoice",
+    getItemCount: () => completedRef.current,
+  });
 
   useEffect(() => {
     return () => {
@@ -56,6 +64,7 @@ export default function GrammarChoiceSession({
 
   const persist = useCallback(
     (nextCorrectChoices: Record<number, string>, nextMissedIndexes: number[]) => {
+      const nextCompletedCount = Object.keys(nextCorrectChoices).length;
       const missed = new Set(nextMissedIndexes);
       const weak = sentences
         .map((sentence, index) =>
@@ -77,11 +86,13 @@ export default function GrammarChoiceSession({
         group.id
       );
 
-      if (Object.keys(nextCorrectChoices).length === sentences.length) {
+      completedRef.current = nextCompletedCount;
+      if (nextCompletedCount === sentences.length) {
+        logActivitySession(nextCompletedCount);
         setPhase("summary");
       }
     },
-    [group.id, sentences]
+    [group.id, logActivitySession, sentences]
   );
 
   const clearWrongChoiceSoon = (sentenceIndex: number) => {

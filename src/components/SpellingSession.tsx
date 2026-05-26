@@ -9,6 +9,7 @@ import {
 import { cancelSpeech, ensureVoicesLoaded, speakEnglish } from "../lib/tts";
 import { updateGroupModeStats } from "../lib/storage";
 import OnScreenKeyboard from "./OnScreenKeyboard";
+import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
 /** Successful solve after this many attempts (including the correct one) → practice-more list. */
 const WEAK_TRY_THRESHOLD = 4;
@@ -54,9 +55,16 @@ export default function SpellingSession({
 
   const correctRef = useRef(0);
   const weakRef = useRef<string[]>([]);
+  const completedRef = useRef(0);
 
   const word = deck[wordIndex];
   const isLast = wordIndex >= deck.length - 1;
+  const logActivitySession = useActivitySessionLogger({
+    groupId: group.id,
+    groupTitle: group.title,
+    mode: "spelling",
+    getItemCount: () => completedRef.current,
+  });
 
   const filledGuess = useMemo(() => slots.join(""), [slots]);
 
@@ -100,11 +108,12 @@ export default function SpellingSession({
 
   const goSummary = useCallback(
     (weak: string[], correct: number) => {
+      logActivitySession(deck.length);
       persist(weak, correct, deck.length);
       setWeakList(weak);
       setPhase("summary");
     },
-    [persist, deck.length]
+    [logActivitySession, persist, deck.length]
   );
 
   const advanceAfterCorrect = useCallback(() => {
@@ -128,6 +137,7 @@ export default function SpellingSession({
         weakRef.current = [...weakRef.current, displayEn];
       }
       correctRef.current += 1;
+      completedRef.current = wordIndex + 1;
 
       setShowingSuccess(true);
       setFeedback(canonical.split("").map(() => "correct" as const));
@@ -146,6 +156,7 @@ export default function SpellingSession({
     filledGuess,
     canonical,
     triesThisWord,
+    wordIndex,
     advanceAfterCorrect,
   ]);
 
@@ -153,6 +164,7 @@ export default function SpellingSession({
     if (showingSuccess) return;
     const displayEn = word.en.trim();
     weakRef.current = [...weakRef.current, displayEn];
+    completedRef.current = wordIndex + 1;
     if (isLast) {
       goSummary([...weakRef.current], correctRef.current);
       return;

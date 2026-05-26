@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { StoryClozeBlank, StoryClozeGroup } from "../types";
 import { updateGroupModeStats } from "../lib/storage";
+import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
 type Props = {
   group: StoryClozeGroup;
@@ -61,12 +62,19 @@ export default function StoryClozeSession({
   const wrongStoryTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
   const wrongChoiceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const completedRef = useRef(0);
 
   const foundTokenSet = useMemo(() => new Set(foundTokenIndexes), [foundTokenIndexes]);
   const targetTokenSet = useMemo(() => new Set(targetTokenIndexes), [targetTokenIndexes]);
   const missedSet = useMemo(() => new Set(missedIndexes), [missedIndexes]);
   const correctFirstTryCount = group.blanks.length - missedIndexes.length;
   const currentBlank = group.blanks[currentBlankIndex];
+  const logActivitySession = useActivitySessionLogger({
+    groupId: group.id,
+    groupTitle: group.title,
+    mode: "storyCloze",
+    getItemCount: () => completedRef.current,
+  });
 
   useEffect(() => {
     return () => {
@@ -78,6 +86,7 @@ export default function StoryClozeSession({
 
   const persist = useCallback(
     (nextCorrectChoices: Record<number, string>, nextMissedIndexes: number[]) => {
+      const nextCompletedCount = Object.keys(nextCorrectChoices).length;
       const missed = new Set(nextMissedIndexes);
       const weak = group.blanks
         .map((blank, index) =>
@@ -97,11 +106,13 @@ export default function StoryClozeSession({
         group.id
       );
 
-      if (Object.keys(nextCorrectChoices).length === group.blanks.length) {
+      completedRef.current = nextCompletedCount;
+      if (nextCompletedCount === group.blanks.length) {
+        logActivitySession(nextCompletedCount);
         setPhase("summary");
       }
     },
-    [group.blanks, group.id]
+    [group.blanks, group.id, logActivitySession]
   );
 
   const clearWrongStoryTokenSoon = (tokenIndex: number) => {

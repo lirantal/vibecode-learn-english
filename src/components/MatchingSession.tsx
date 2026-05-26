@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { PointerEvent as ReactPointerEvent } from "react";
 import type { MatchingGroup, Word } from "../types";
 import { updateGroupModeStats } from "../lib/storage";
+import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
 type Props = {
   group: MatchingGroup;
@@ -79,6 +80,7 @@ export default function MatchingSession({
   const hebrewItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const hebrewDotRefs = useRef<Record<string, HTMLSpanElement | null>>({});
   const wrongLineTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const completedRef = useRef(0);
 
   const [matchedIds, setMatchedIds] = useState<string[]>([]);
   const [missedIds, setMissedIds] = useState<string[]>([]);
@@ -89,6 +91,12 @@ export default function MatchingSession({
 
   const matchedSet = useMemo(() => new Set(matchedIds), [matchedIds]);
   const missedSet = useMemo(() => new Set(missedIds), [missedIds]);
+  const logActivitySession = useActivitySessionLogger({
+    groupId: group.id,
+    groupTitle: group.title,
+    mode: "matching",
+    getItemCount: () => completedRef.current,
+  });
 
   const measureConnection = useCallback((sourceId: string): ConnectorLine | null => {
     const board = boardRef.current;
@@ -228,10 +236,12 @@ export default function MatchingSession({
 
     if (targetId === sourceId) {
       const nextMatchedIds = [...matchedIds, sourceId];
+      completedRef.current = nextMatchedIds.length;
       setMatchedIds(nextMatchedIds);
       setDragging(null);
       persist(nextMatchedIds, missedIds);
       if (nextMatchedIds.length === englishWords.length) {
+        logActivitySession(nextMatchedIds.length);
         setPhase("summary");
       }
       return;

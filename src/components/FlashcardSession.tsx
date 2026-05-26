@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import type { WordListGroup } from "../types";
 import { updateGroupModeStats } from "../lib/storage";
+import { useActivitySessionLogger } from "./useActivitySessionLogger";
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -29,9 +30,16 @@ export default function FlashcardSession({
   const [flipped, setFlipped] = useState(false);
   const [needMore, setNeedMore] = useState<string[]>([]);
   const [phase, setPhase] = useState<"run" | "summary">("run");
+  const completedRef = useRef(0);
 
   const current = deck[index];
   const isLast = index >= deck.length - 1;
+  const logActivitySession = useActivitySessionLogger({
+    groupId: group.id,
+    groupTitle: group.title,
+    mode: "flashcard",
+    getItemCount: () => completedRef.current,
+  });
 
   const persist = useCallback(
     (weak: string[], known: number, total: number) => {
@@ -57,9 +65,11 @@ export default function FlashcardSession({
     const wordsSoFar = index + 1;
     const known = wordsSoFar - newWeak.length;
 
+    completedRef.current = wordsSoFar;
     persist(newWeak, known, wordsSoFar);
 
     if (isLast) {
+      logActivitySession(wordsSoFar);
       setNeedMore(newWeak);
       setPhase("summary");
       return;

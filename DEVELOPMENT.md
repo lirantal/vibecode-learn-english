@@ -242,11 +242,16 @@ Stored structure:
       storyCloze?: { same shape }
     }
   },
+  activityLog?: [
+    { id, runAt, groupId, groupTitle, mode, itemCount }
+  ],
   lastSelectedGroupId?: string
 }
 ```
 
 Spelling, matching, grammar-choice, and story-cloze modes persist progress during the run, not just at the final summary. This means partial scores appear on the home screen even if the user navigates away mid-session via the navbar.
+
+Activity logging is also centralized in `storage.ts`. Each practice session records one activity entry with the local run time, exercise mode, group title, and number of completed items; partial sessions are logged when leaving a session after at least one completed item.
 
 ## Styling Conventions
 

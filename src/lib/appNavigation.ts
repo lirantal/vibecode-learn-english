@@ -7,7 +7,7 @@ function isAppView(value: unknown): value is AppView {
   }
 
   const name = (value as AppView).name;
-  if (name === "home") {
+  if (name === "home" || name === "activity") {
     return true;
   }
 
