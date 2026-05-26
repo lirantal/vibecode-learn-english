@@ -222,6 +222,65 @@
       ]
     },
     {
+      "id": "possessives-class-trip-02",
+      "title": "מילות שייכות — Class trip",
+      "exerciseType": "storyCloze",
+      "storyTitle": "Class trip",
+      "story": "Today our class goes on a trip. I pack my blue bag and my water bottle. You bring your camera and your notebook. Ben wears his red hat because the sun is hot. Maya brings her sandwiches and her small radio. The bus is yellow, and its wheels are clean. Our teacher gives us a map, and our friends sit near us. The guides show their tickets and tell us their plan for the day. Everyone is happy because the trip is fun.",
+      "targetWords": ["my", "your", "his", "her", "its", "our", "their"],
+      "blanks": [
+        {
+          "prefix": "I pack a blue bag. ",
+          "suffix": " bag is blue.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "My",
+          "hintHe": "התיק שייך לי."
+        },
+        {
+          "prefix": "You bring a camera. ",
+          "suffix": " camera is small.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Your",
+          "hintHe": "המצלמה שייכת לך."
+        },
+        {
+          "prefix": "Ben wears a red hat. ",
+          "suffix": " hat is red.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "His",
+          "hintHe": "הכובע שייך לבן."
+        },
+        {
+          "prefix": "Maya brings sandwiches. ",
+          "suffix": " sandwiches are fresh.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "הכריכים שייכים למאיה."
+        },
+        {
+          "prefix": "The bus has clean wheels. ",
+          "suffix": " wheels are clean.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Its",
+          "hintHe": "הגלגלים שייכים לאוטובוס."
+        },
+        {
+          "prefix": "We have a teacher. ",
+          "suffix": " teacher gives us a map.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Our",
+          "hintHe": "המורה שייכת לקבוצה שלנו."
+        },
+        {
+          "prefix": "The guides have tickets. ",
+          "suffix": " tickets are ready.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Their",
+          "hintHe": "הכרטיסים שייכים למדריכים."
+        }
+      ]
+    },
+    {
       "id": "grammar-present-simple-negative-01",
       "title": "דקדוק — don't / doesn't",
       "exerciseType": "grammarChoice",
