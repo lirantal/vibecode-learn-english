@@ -39,9 +39,9 @@ export default defineConfig(({ mode }) => {
           "apple-touch-icon.png",
         ],
         manifest: {
-          name: "תרגול אנגלית",
-          short_name: "אנגלית",
-          description: "תרגול אוצר מילים ודקדוק באנגלית לתלמידים דוברי עברית.",
+          name: "מרכז למידה",
+          short_name: "למידה",
+          description: "אפליקציית למידה מודולרית לתלמידים דוברי עברית.",
           lang: "he",
           dir: "rtl",
           start_url: "/",

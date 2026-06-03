@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { ScoreSnapshot, StoryClozeBlank, StoryClozeGroup } from "../types";
-import { makeScoreSnapshot } from "../lib/score";
-import { updateGroupModeStats } from "../lib/storage";
-import { useActivitySessionLogger } from "./useActivitySessionLogger";
+import type { ScoreSnapshot } from "../../../core/types";
+import type { StoryClozeBlank, StoryClozeGroup } from "../types";
+import { makeScoreSnapshot } from "../../../core/score";
+import { updateGroupModeStats } from "../../../core/storage";
+import { useActivitySessionLogger } from "../../../core/hooks/useActivitySessionLogger";
 
 type Props = {
   group: StoryClozeGroup;
@@ -87,6 +88,7 @@ export default function StoryClozeSession({
     [group.blanks.length]
   );
   const logActivitySession = useActivitySessionLogger({
+    moduleId: "english",
     groupId: group.id,
     groupTitle: group.title,
     mode: "storyCloze",
@@ -114,13 +116,14 @@ export default function StoryClozeSession({
         .filter((sentence): sentence is string => Boolean(sentence));
 
       updateGroupModeStats(
+        "english",
         group.id,
         "storyCloze",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: score.correctCount,
           lastScoreDenominator: group.blanks.length,
-          lastWeakEn: weak,
+          lastWeakItems: weak,
           lastCompletedCount: nextCompletedCount,
           lastTotalCount: group.blanks.length,
           lastErrorCount: missed.size,

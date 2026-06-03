@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { ScoreSnapshot, WordListGroup } from "../types";
+import type { ScoreSnapshot } from "../../../core/types";
+import type { WordListGroup } from "../types";
 import {
   answersMatch,
   normalizeEn,
   wordleFeedback,
   type LetterFeedback,
 } from "../lib/normalize";
-import { makeScoreSnapshot } from "../lib/score";
+import { makeScoreSnapshot } from "../../../core/score";
 import { cancelSpeech, ensureVoicesLoaded, speakEnglish } from "../lib/tts";
-import { updateGroupModeStats } from "../lib/storage";
+import { updateGroupModeStats } from "../../../core/storage";
 import OnScreenKeyboard from "./OnScreenKeyboard";
-import { useActivitySessionLogger } from "./useActivitySessionLogger";
+import { useActivitySessionLogger } from "../../../core/hooks/useActivitySessionLogger";
 
 /** Successful solve after this many attempts (including the correct one) → practice-more list. */
 const WEAK_TRY_THRESHOLD = 4;
@@ -71,6 +72,7 @@ export default function SpellingSession({
     [deck.length]
   );
   const logActivitySession = useActivitySessionLogger({
+    moduleId: "english",
     groupId: group.id,
     groupTitle: group.title,
     mode: "spelling",
@@ -104,13 +106,14 @@ export default function SpellingSession({
   const persist = useCallback(
     (weak: string[], correct: number, completed: number) => {
       updateGroupModeStats(
+        "english",
         group.id,
         "spelling",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: correct,
           lastScoreDenominator: deck.length,
-          lastWeakEn: weak,
+          lastWeakItems: weak,
           lastCompletedCount: completed,
           lastTotalCount: deck.length,
           lastErrorCount: weak.length,

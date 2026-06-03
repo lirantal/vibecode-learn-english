@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useRef } from "react";
-import type { PracticeMode, ScoreSnapshot } from "../types";
-import { recordActivitySession } from "../lib/storage";
+import type { ScoreSnapshot } from "../types";
+import { recordActivitySession } from "../storage";
 
 type ActivitySessionLoggerOptions = {
+  moduleId: string;
   groupId: string;
   groupTitle: string;
-  mode: PracticeMode;
+  mode: string;
   getItemCount: () => number;
   getScoreSnapshot?: () => ScoreSnapshot | undefined;
 };
 
 export function useActivitySessionLogger({
+  moduleId,
   groupId,
   groupTitle,
   mode,
@@ -30,6 +32,7 @@ export function useActivitySessionLogger({
 
       loggedRef.current = true;
       recordActivitySession({
+        moduleId,
         groupId,
         groupTitle,
         mode,
@@ -37,7 +40,7 @@ export function useActivitySessionLogger({
         score: score ?? getScoreSnapshotRef.current?.(),
       });
     },
-    [groupId, groupTitle, mode]
+    [moduleId, groupId, groupTitle, mode]
   );
 
   useEffect(() => {

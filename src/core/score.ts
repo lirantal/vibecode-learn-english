@@ -1,8 +1,6 @@
-import type { ModeStats, PracticeMode, ScoreSnapshot, WordGroup } from "../types";
+import type { ModeStats, ScoreSnapshot } from "./types";
 
 export type ScoreBadgeTone = "empty" | "great" | "incomplete" | "weak";
-
-export const GRAMMAR_CHOICE_ITEMS_PER_RUN = 5;
 
 function count(value: unknown): number | undefined {
   return typeof value === "number" && Number.isFinite(value)
@@ -43,7 +41,7 @@ export function scoreFromStats(
   }
 
   const correct = count(stats.lastScoreNumerator) ?? 0;
-  const errors = count(stats.lastErrorCount) ?? stats.lastWeakEn.length;
+  const errors = count(stats.lastErrorCount) ?? stats.lastWeakItems.length;
   const legacyCompleted = Math.min(
     count(stats.lastScoreDenominator) ?? exerciseTotal,
     correct + errors
@@ -68,22 +66,3 @@ export function scoreBadgeTone(score: ScoreSnapshot): ScoreBadgeTone {
   return "weak";
 }
 
-export function exerciseTotalForMode(group: WordGroup, mode: PracticeMode): number {
-  if ((mode === "flashcard" || mode === "spelling") && "words" in group) {
-    return group.words.length;
-  }
-
-  if (mode === "matching" && group.exerciseType === "matching") {
-    return group.words.length;
-  }
-
-  if (mode === "grammarChoice" && group.exerciseType === "grammarChoice") {
-    return Math.min(group.sentences.length, GRAMMAR_CHOICE_ITEMS_PER_RUN);
-  }
-
-  if (mode === "storyCloze" && group.exerciseType === "storyCloze") {
-    return group.blanks.length;
-  }
-
-  return 0;
-}

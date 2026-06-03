@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import type { MatchingGroup, ScoreSnapshot, Word } from "../types";
-import { makeScoreSnapshot } from "../lib/score";
-import { updateGroupModeStats } from "../lib/storage";
-import { useActivitySessionLogger } from "./useActivitySessionLogger";
+import type { ScoreSnapshot } from "../../../core/types";
+import type { MatchingGroup, Word } from "../types";
+import { makeScoreSnapshot } from "../../../core/score";
+import { updateGroupModeStats } from "../../../core/storage";
+import { useActivitySessionLogger } from "../../../core/hooks/useActivitySessionLogger";
 
 type Props = {
   group: MatchingGroup;
@@ -105,6 +106,7 @@ export default function MatchingSession({
     [englishWords.length]
   );
   const logActivitySession = useActivitySessionLogger({
+    moduleId: "english",
     groupId: group.id,
     groupTitle: group.title,
     mode: "matching",
@@ -132,13 +134,14 @@ export default function MatchingSession({
       const score = snapshotFor(nextMatchedIds, nextMissedIds);
 
       updateGroupModeStats(
+        "english",
         group.id,
         "matching",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: correct,
           lastScoreDenominator: englishWords.length,
-          lastWeakEn: weak,
+          lastWeakItems: weak,
           lastCompletedCount: nextMatchedIds.length,
           lastTotalCount: englishWords.length,
           lastErrorCount: missed.size,

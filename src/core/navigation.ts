@@ -1,5 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { AppView } from "../types";
+import type { AppView, ModuleRoute } from "./types";
+
+function isModuleRoute(value: unknown): value is ModuleRoute {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "name" in value &&
+    typeof (value as { name: unknown }).name === "string"
+  );
+}
 
 function isAppView(value: unknown): value is AppView {
   if (!value || typeof value !== "object" || !("name" in value)) {
@@ -11,7 +20,20 @@ function isAppView(value: unknown): value is AppView {
     return true;
   }
 
-  return "groupId" in value && typeof (value as { groupId: unknown }).groupId === "string";
+  if (name === "moduleHome") {
+    return (
+      "moduleId" in value &&
+      typeof (value as { moduleId: unknown }).moduleId === "string"
+    );
+  }
+
+  return (
+    name === "moduleRoute" &&
+    "moduleId" in value &&
+    typeof (value as { moduleId: unknown }).moduleId === "string" &&
+    "route" in value &&
+    isModuleRoute((value as { route: unknown }).route)
+  );
 }
 
 function readViewFromHistoryState(state: unknown): AppView | null {

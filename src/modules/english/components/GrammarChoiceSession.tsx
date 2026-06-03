@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { GrammarChoiceGroup, GrammarChoiceSentence, ScoreSnapshot } from "../types";
-import { GRAMMAR_CHOICE_ITEMS_PER_RUN, makeScoreSnapshot } from "../lib/score";
-import { updateGroupModeStats } from "../lib/storage";
-import { useActivitySessionLogger } from "./useActivitySessionLogger";
+import type { ScoreSnapshot } from "../../../core/types";
+import type { GrammarChoiceGroup, GrammarChoiceSentence } from "../types";
+import { makeScoreSnapshot } from "../../../core/score";
+import { GRAMMAR_CHOICE_ITEMS_PER_RUN } from "../lib/score";
+import { updateGroupModeStats } from "../../../core/storage";
+import { useActivitySessionLogger } from "../../../core/hooks/useActivitySessionLogger";
 
 type Props = {
   group: GrammarChoiceGroup;
@@ -65,6 +67,7 @@ export default function GrammarChoiceSession({
     [sentences.length]
   );
   const logActivitySession = useActivitySessionLogger({
+    moduleId: "english",
     groupId: group.id,
     groupTitle: group.title,
     mode: "grammarChoice",
@@ -92,13 +95,14 @@ export default function GrammarChoiceSession({
         .filter((sentence): sentence is string => Boolean(sentence));
 
       updateGroupModeStats(
+        "english",
         group.id,
         "grammarChoice",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: score.correctCount,
           lastScoreDenominator: sentences.length,
-          lastWeakEn: weak,
+          lastWeakItems: weak,
           lastCompletedCount: nextCompletedCount,
           lastTotalCount: sentences.length,
           lastErrorCount: missed.size,

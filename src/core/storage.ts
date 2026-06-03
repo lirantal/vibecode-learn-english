@@ -2,32 +2,33 @@ import type {
   ActivityLogEntry,
   GroupProgress,
   ModeStats,
-  PracticeMode,
+  ModuleProgress,
   ScoreSnapshot,
   StoredProgress,
-} from "../types";
+} from "./types";
 import { makeScoreSnapshot } from "./score";
 
-const KEY = "vibecode-learn-english:v1";
+const KEY = "vibecode-learn:v2";
+const LEGACY_ENGLISH_KEY = "vibecode-learn-english:v1";
+const ENGLISH_MODULE_ID = "english";
 const STORAGE_TEST_KEY = `${KEY}:storage-test`;
 const STORAGE_AREAS = ["localStorage", "sessionStorage"] as const;
 const MAX_ACTIVITY_LOG_ENTRIES = 500;
+
+type LegacyActivityLogEntry = Omit<ActivityLogEntry, "moduleId">;
+
+type LegacyStoredProgress = {
+  version: 1;
+  byGroup: Record<string, GroupProgress>;
+  activityLog?: LegacyActivityLogEntry[];
+  lastSelectedGroupId?: string;
+};
 
 let memoryStore: StoredProgress | undefined;
 let persistenceRequested = false;
 
 function emptyStore(): StoredProgress {
-  return { version: 1, byGroup: {}, activityLog: [] };
-}
-
-function isPracticeMode(value: unknown): value is PracticeMode {
-  return (
-    value === "flashcard" ||
-    value === "spelling" ||
-    value === "matching" ||
-    value === "grammarChoice" ||
-    value === "storyCloze"
-  );
+  return { version: 2, byModule: {}, activityLog: [] };
 }
 
 function isScoreSnapshot(value: unknown): value is ScoreSnapshot {
@@ -47,14 +48,33 @@ function isActivityLogEntry(value: unknown): value is ActivityLogEntry {
     value !== null &&
     typeof (value as ActivityLogEntry).id === "string" &&
     typeof (value as ActivityLogEntry).runAt === "string" &&
+    typeof (value as ActivityLogEntry).moduleId === "string" &&
     typeof (value as ActivityLogEntry).groupId === "string" &&
     typeof (value as ActivityLogEntry).groupTitle === "string" &&
-    isPracticeMode((value as ActivityLogEntry).mode) &&
+    typeof (value as ActivityLogEntry).mode === "string" &&
     Number.isFinite((value as ActivityLogEntry).itemCount) &&
     (value as ActivityLogEntry).itemCount > 0 &&
     (
       (value as ActivityLogEntry).score === undefined ||
       isScoreSnapshot((value as ActivityLogEntry).score)
+    )
+  );
+}
+
+function isLegacyActivityLogEntry(value: unknown): value is LegacyActivityLogEntry {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as LegacyActivityLogEntry).id === "string" &&
+    typeof (value as LegacyActivityLogEntry).runAt === "string" &&
+    typeof (value as LegacyActivityLogEntry).groupId === "string" &&
+    typeof (value as LegacyActivityLogEntry).groupTitle === "string" &&
+    typeof (value as LegacyActivityLogEntry).mode === "string" &&
+    Number.isFinite((value as LegacyActivityLogEntry).itemCount) &&
+    (value as LegacyActivityLogEntry).itemCount > 0 &&
+    (
+      (value as LegacyActivityLogEntry).score === undefined ||
+      isScoreSnapshot((value as LegacyActivityLogEntry).score)
     )
   );
 }
@@ -73,10 +93,10 @@ function asWeakList(value: unknown): string[] {
 
 function normalizeStats(value: unknown): ModeStats | undefined {
   if (typeof value !== "object" || value === null) return undefined;
-  const stats = value as ModeStats;
+  const stats = value as ModeStats & { lastWeakEn?: unknown };
   if (typeof stats.lastRunAt !== "string") return undefined;
 
-  const weak = asWeakList(stats.lastWeakEn);
+  const weak = asWeakList(stats.lastWeakItems ?? stats.lastWeakEn);
   const correct = asCount(stats.lastScoreNumerator) ?? 0;
   const denominator = asCount(stats.lastScoreDenominator) ?? 0;
   const errors = asCount(stats.lastErrorCount) ?? weak.length;
@@ -85,7 +105,7 @@ function normalizeStats(value: unknown): ModeStats | undefined {
     lastRunAt: stats.lastRunAt,
     lastScoreNumerator: correct,
     lastScoreDenominator: denominator,
-    lastWeakEn: weak,
+    lastWeakItems: weak,
     lastCompletedCount:
       asCount(stats.lastCompletedCount) ?? Math.min(denominator, correct + errors),
     lastTotalCount: asCount(stats.lastTotalCount),
@@ -105,9 +125,19 @@ function isStoredProgress(value: unknown): value is StoredProgress {
   return (
     typeof value === "object" &&
     value !== null &&
-    (value as StoredProgress).version === 1 &&
-    typeof (value as StoredProgress).byGroup === "object" &&
-    (value as StoredProgress).byGroup !== null
+    (value as StoredProgress).version === 2 &&
+    typeof (value as StoredProgress).byModule === "object" &&
+    (value as StoredProgress).byModule !== null
+  );
+}
+
+function isLegacyStoredProgress(value: unknown): value is LegacyStoredProgress {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    (value as LegacyStoredProgress).version === 1 &&
+    typeof (value as LegacyStoredProgress).byGroup === "object" &&
+    (value as LegacyStoredProgress).byGroup !== null
   );
 }
 
@@ -124,17 +154,26 @@ function getStorageArea(kind: (typeof STORAGE_AREAS)[number]): Storage | undefin
   }
 }
 
-function readFromStorage(storage: Storage | undefined): StoredProgress | undefined {
+function readJsonFromStorage(storage: Storage | undefined, key: string): unknown {
   if (!storage) return undefined;
 
   try {
-    const raw = storage.getItem(KEY);
+    const raw = storage.getItem(key);
     if (!raw) return undefined;
-    const parsed = JSON.parse(raw) as unknown;
-    return isStoredProgress(parsed) ? parsed : undefined;
+    return JSON.parse(raw) as unknown;
   } catch {
     return undefined;
   }
+}
+
+function readFromStorage(storage: Storage | undefined): StoredProgress | undefined {
+  const parsed = readJsonFromStorage(storage, KEY);
+  return isStoredProgress(parsed) ? parsed : undefined;
+}
+
+function readLegacyFromStorage(storage: Storage | undefined): StoredProgress | undefined {
+  const parsed = readJsonFromStorage(storage, LEGACY_ENGLISH_KEY);
+  return isLegacyStoredProgress(parsed) ? migrateLegacyProgress(parsed) : undefined;
 }
 
 function statsTime(stats: ModeStats | undefined): number {
@@ -161,19 +200,20 @@ function mergeGroupProgress(
   current: GroupProgress | undefined,
   next: GroupProgress | undefined
 ): GroupProgress {
-  return {
-    flashcard: newestStats(normalizeStats(current?.flashcard), normalizeStats(next?.flashcard)),
-    spelling: newestStats(normalizeStats(current?.spelling), normalizeStats(next?.spelling)),
-    matching: newestStats(normalizeStats(current?.matching), normalizeStats(next?.matching)),
-    grammarChoice: newestStats(
-      normalizeStats(current?.grammarChoice),
-      normalizeStats(next?.grammarChoice)
-    ),
-    storyCloze: newestStats(
-      normalizeStats(current?.storyCloze),
-      normalizeStats(next?.storyCloze)
-    ),
-  };
+  const modes = new Set([
+    ...Object.keys(current ?? {}),
+    ...Object.keys(next ?? {}),
+  ]);
+  const merged: GroupProgress = {};
+
+  for (const mode of modes) {
+    merged[mode] = newestStats(
+      normalizeStats(current?.[mode]),
+      normalizeStats(next?.[mode])
+    );
+  }
+
+  return merged;
 }
 
 function pruneEmptyModes(group: GroupProgress): GroupProgress {
@@ -198,15 +238,32 @@ function mergeActivityLogs(stores: StoredProgress[]): ActivityLogEntry[] {
     .slice(0, MAX_ACTIVITY_LOG_ENTRIES);
 }
 
+function mergeModuleProgress(
+  current: ModuleProgress | undefined,
+  next: ModuleProgress | undefined
+): ModuleProgress {
+  const merged: ModuleProgress = {
+    byGroup: { ...(current?.byGroup ?? {}) },
+    lastSelectedGroupId: current?.lastSelectedGroupId ?? next?.lastSelectedGroupId,
+  };
+
+  for (const [groupId, progress] of Object.entries(next?.byGroup ?? {})) {
+    merged.byGroup[groupId] = pruneEmptyModes(
+      mergeGroupProgress(merged.byGroup[groupId], progress)
+    );
+  }
+
+  return merged;
+}
+
 function mergeProgressStores(stores: StoredProgress[]): StoredProgress {
   const merged = emptyStore();
 
   for (const store of stores) {
-    merged.lastSelectedGroupId ??= store.lastSelectedGroupId;
-
-    for (const [groupId, progress] of Object.entries(store.byGroup)) {
-      merged.byGroup[groupId] = pruneEmptyModes(
-        mergeGroupProgress(merged.byGroup[groupId], progress)
+    for (const [moduleId, progress] of Object.entries(store.byModule)) {
+      merged.byModule[moduleId] = mergeModuleProgress(
+        merged.byModule[moduleId],
+        progress
       );
     }
   }
@@ -214,6 +271,40 @@ function mergeProgressStores(stores: StoredProgress[]): StoredProgress {
   merged.activityLog = mergeActivityLogs(stores);
 
   return merged;
+}
+
+function migrateLegacyActivityLogEntry(
+  entry: LegacyActivityLogEntry
+): ActivityLogEntry {
+  return {
+    ...entry,
+    moduleId: ENGLISH_MODULE_ID,
+    itemCount: asCount(entry.itemCount) ?? 0,
+    score: entry.score ? makeScoreSnapshot(entry.score) : undefined,
+  };
+}
+
+function migrateLegacyProgress(legacy: LegacyStoredProgress): StoredProgress {
+  const moduleProgress: ModuleProgress = {
+    byGroup: {},
+    lastSelectedGroupId: legacy.lastSelectedGroupId,
+  };
+
+  for (const [groupId, progress] of Object.entries(legacy.byGroup)) {
+    moduleProgress.byGroup[groupId] = pruneEmptyModes(
+      mergeGroupProgress(undefined, progress)
+    );
+  }
+
+  return {
+    version: 2,
+    byModule: {
+      [ENGLISH_MODULE_ID]: moduleProgress,
+    },
+    activityLog: (legacy.activityLog ?? [])
+      .filter(isLegacyActivityLogEntry)
+      .map(migrateLegacyActivityLogEntry),
+  };
 }
 
 function requestPersistentStorage(): void {
@@ -232,8 +323,10 @@ function availableStorageAreas(): Storage[] {
 }
 
 export function loadProgress(): StoredProgress {
+  const storageAreas = availableStorageAreas();
   const stores = [
-    ...availableStorageAreas().map(readFromStorage),
+    ...storageAreas.map(readFromStorage),
+    ...storageAreas.map(readLegacyFromStorage),
     memoryStore,
   ].filter((store): store is StoredProgress => store !== undefined);
 
@@ -265,20 +358,23 @@ export function saveProgress(data: StoredProgress): void {
 }
 
 export function updateGroupModeStats(
+  moduleId: string,
   groupId: string,
-  mode: PracticeMode,
+  mode: string,
   stats: ModeStats,
   lastSelected?: string
 ): void {
   const cur = loadProgress();
-  const prev: GroupProgress = cur.byGroup[groupId] ?? {};
-  cur.byGroup[groupId] = {
+  const moduleProgress = cur.byModule[moduleId] ?? { byGroup: {} };
+  const prev: GroupProgress = moduleProgress.byGroup[groupId] ?? {};
+  moduleProgress.byGroup[groupId] = {
     ...prev,
     [mode]: stats,
   };
   if (lastSelected !== undefined) {
-    cur.lastSelectedGroupId = lastSelected;
+    moduleProgress.lastSelectedGroupId = lastSelected;
   }
+  cur.byModule[moduleId] = moduleProgress;
   saveProgress(cur);
 }
 
@@ -290,7 +386,7 @@ export function recordActivitySession(
   const activity: ActivityLogEntry = {
     ...entry,
     runAt,
-    id: `${runAt}-${entry.groupId}-${entry.mode}-${Math.random().toString(36).slice(2, 10)}`,
+    id: `${runAt}-${entry.moduleId}-${entry.groupId}-${entry.mode}-${Math.random().toString(36).slice(2, 10)}`,
   };
 
   cur.activityLog = [activity, ...(cur.activityLog ?? [])].slice(
@@ -300,8 +396,10 @@ export function recordActivitySession(
   saveProgress(cur);
 }
 
-export function setLastSelectedGroupId(groupId: string): void {
+export function setLastSelectedGroupId(moduleId: string, groupId: string): void {
   const cur = loadProgress();
-  cur.lastSelectedGroupId = groupId;
+  const moduleProgress = cur.byModule[moduleId] ?? { byGroup: {} };
+  moduleProgress.lastSelectedGroupId = groupId;
+  cur.byModule[moduleId] = moduleProgress;
   saveProgress(cur);
 }

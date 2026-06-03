@@ -1,16 +1,9 @@
-import type { ActivityLogEntry, PracticeMode, ScoreSnapshot } from "../types";
-import { makeScoreSnapshot, scoreBadgeTone } from "../lib/score";
+import type { ActivityLogEntry, ScoreSnapshot } from "../types";
+import { makeScoreSnapshot, scoreBadgeTone } from "../score";
 
 type Props = {
   entries: ActivityLogEntry[];
-};
-
-const modeLabels: Record<PracticeMode, string> = {
-  flashcard: "כרטיסיות",
-  spelling: "איות",
-  matching: "חיבור תרגומים",
-  grammarChoice: "דקדוק",
-  storyCloze: "סיפור והשלמה",
+  getModeLabel: (entry: ActivityLogEntry) => string;
 };
 
 function entryTime(entry: ActivityLogEntry): number {
@@ -64,7 +57,7 @@ function ScoreBadge({ score }: { score: ScoreSnapshot }) {
   );
 }
 
-export default function ActivityLogPage({ entries }: Props) {
+export default function ActivityLogPage({ entries, getModeLabel }: Props) {
   const sortedEntries = [...entries].sort((a, b) => entryTime(b) - entryTime(a));
   const days = sortedEntries.reduce<Array<{ key: string; entries: ActivityLogEntry[] }>>(
     (groups, entry) => {
@@ -110,7 +103,7 @@ export default function ActivityLogPage({ entries }: Props) {
                       </time>
                       <span className="activity-card__body">
                         <span className="activity-card__title">
-                          {modeLabels[entry.mode]}
+                          {getModeLabel(entry)}
                         </span>
                         <span className="activity-card__group">{entry.groupTitle}</span>
                       </span>

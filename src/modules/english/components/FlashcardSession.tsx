@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import type { ScoreSnapshot } from "../types";
+import type { ScoreSnapshot } from "../../../core/types";
 import type { WordListGroup } from "../types";
-import { makeScoreSnapshot } from "../lib/score";
-import { updateGroupModeStats } from "../lib/storage";
-import { useActivitySessionLogger } from "./useActivitySessionLogger";
+import { makeScoreSnapshot } from "../../../core/score";
+import { updateGroupModeStats } from "../../../core/storage";
+import { useActivitySessionLogger } from "../../../core/hooks/useActivitySessionLogger";
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -49,6 +49,7 @@ export default function FlashcardSession({
     [deck.length]
   );
   const logActivitySession = useActivitySessionLogger({
+    moduleId: "english",
     groupId: group.id,
     groupTitle: group.title,
     mode: "flashcard",
@@ -59,13 +60,14 @@ export default function FlashcardSession({
   const persist = useCallback(
     (weak: string[], known: number, completed: number) => {
       updateGroupModeStats(
+        "english",
         group.id,
         "flashcard",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: known,
           lastScoreDenominator: deck.length,
-          lastWeakEn: weak,
+          lastWeakItems: weak,
           lastCompletedCount: completed,
           lastTotalCount: deck.length,
           lastErrorCount: weak.length,

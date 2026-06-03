@@ -1,3 +1,5 @@
+import type { ModeStats } from "../../core/types";
+
 export type Word = {
   en: string;
   he: string;
@@ -49,59 +51,26 @@ export type StoryClozeGroup = {
   blanks: StoryClozeBlank[];
 };
 
-export type WordGroup = WordListGroup | MatchingGroup | GrammarChoiceGroup | StoryClozeGroup;
+export type WordGroup =
+  | WordListGroup
+  | MatchingGroup
+  | GrammarChoiceGroup
+  | StoryClozeGroup;
 
 export type WordGroupsFile = {
   groups: WordGroup[];
 };
 
-export type PracticeMode = "flashcard" | "spelling" | "matching" | "grammarChoice" | "storyCloze";
+export type EnglishPracticeMode =
+  | "flashcard"
+  | "spelling"
+  | "matching"
+  | "grammarChoice"
+  | "storyCloze";
 
-export type ScoreSnapshot = {
-  correctCount: number;
-  completedCount: number;
-  totalCount: number;
-  errorCount: number;
-};
+export type EnglishGroupProgress = Partial<Record<EnglishPracticeMode, ModeStats>>;
 
-export type ActivityLogEntry = {
-  id: string;
-  runAt: string;
-  groupId: string;
-  groupTitle: string;
-  mode: PracticeMode;
-  itemCount: number;
-  score?: ScoreSnapshot;
-};
-
-export type ModeStats = {
-  lastRunAt: string;
-  lastScoreNumerator: number;
-  lastScoreDenominator: number;
-  lastWeakEn: string[];
-  lastCompletedCount?: number;
-  lastTotalCount?: number;
-  lastErrorCount?: number;
-};
-
-export type GroupProgress = {
-  flashcard?: ModeStats;
-  spelling?: ModeStats;
-  matching?: ModeStats;
-  grammarChoice?: ModeStats;
-  storyCloze?: ModeStats;
-};
-
-export type StoredProgress = {
-  version: 1;
-  byGroup: Record<string, GroupProgress>;
-  activityLog?: ActivityLogEntry[];
-  lastSelectedGroupId?: string;
-};
-
-export type AppView =
-  | { name: "home" }
-  | { name: "activity" }
+export type EnglishRoute =
   | { name: "pickMode"; groupId: string }
   | { name: "flashcard"; groupId: string }
   | { name: "spelling"; groupId: string }

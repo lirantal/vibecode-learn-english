@@ -1,17 +1,15 @@
-# English Vocabulary Practice
+# Modular Learning App
 
-A mobile-first web app for Hebrew-speaking students to practice English vocabulary and grammar through flashcards, spelling exercises, translation matching, and grammar-choice sentences.
+A mobile-first learning app for Hebrew-speaking students. The app is now structured as a shared learning shell with subject modules. The first module is English, with vocabulary and grammar practice.
 
 ## Features
 
-- **Flashcards** — see the English word, tap to reveal the Hebrew translation, self-rate your knowledge
-- **Spelling** — hear the word via text-to-speech, type it out with Wordle-style feedback
-- **Translation matching** — connect English words to their Hebrew translations in dedicated matching groups
-- **Grammar choice** — choose the correct grammar word inside English sentences, with red retry feedback and green locked-in answers
-- **Score tracking** — color-coded badges show your progress per word group and persist across browser/app sessions
-- **Installable PWA** — generated web manifest, service worker caching, mobile home-screen install support, and an in-app install button
-- **On-screen QWERTY keyboard** — practice on mobile without switching OS language
-- **Extensible word lists** — add new groups by editing a single JSON file
+- **Module picker** — the app home lists learning modules such as English, with room for Math, Science, and other future subjects.
+- **English practice** — flashcards, spelling with TTS, translation matching, grammar choice, and story cloze exercises.
+- **Score tracking** — color-coded badges persist progress per module, group, and mode.
+- **Activity log** — sessions are recorded with dates, modes, item counts, and scores.
+- **Installable PWA** — generated manifest, service worker caching, mobile home-screen install support, and an in-app install button.
+- **Static app** — no backend or database; content and progress stay in the browser.
 
 ## Quick Start
 
@@ -38,48 +36,16 @@ Production builds generate a PWA manifest and service worker via [`vite-plugin-p
 
 Android/desktop Chromium browsers can open the native install prompt. iOS Safari does not expose a programmatic install prompt, so the same button shows Hebrew instructions for using Share → Add to Home Screen.
 
-## Adding Words
+## Adding English Content
 
-Edit [`src/data/wordGroups.json`](src/data/wordGroups.json):
-
-```json
-{
-  "id": "week-2",
-  "title": "מילים — שבוע 2",
-  "words": [
-    { "en": "believe", "he": "להאמין" }
-  ]
-}
-```
-
-For matching-only groups, add `"exerciseType": "matching"` and keep each group to 10 words or fewer for the two-column layout.
-
-For grammar-choice groups, add `"exerciseType": "grammarChoice"` and a `sentences` array with at least 5 prompts. Each run samples 5 sentences from the bank:
-
-```json
-{
-  "id": "grammar-present-simple-01",
-  "title": "דקדוק — don't / doesn't",
-  "exerciseType": "grammarChoice",
-  "sentences": [
-    {
-      "prefix": "I ",
-      "choices": ["don't", "doesn't"],
-      "suffix": " like ice cream.",
-      "correctChoice": "don't"
-    }
-  ]
-}
-```
-
-Chart-style grammar worksheets can be converted into larger grammar-choice banks by expanding each subject + verb phrase combination into a sentence object.
-
-Changes are picked up instantly via hot-reload.
+Edit [`src/modules/english/data/wordGroups.json`](src/modules/english/data/wordGroups.json). See the [English content guide](docs/modules/english/content.md) for the schema and examples.
 
 ## Documentation
 
 - [AGENTS.md](AGENTS.md) — quick-reference for AI agents and contributors
-- [DEVELOPMENT.md](DEVELOPMENT.md) — architecture, components, styling conventions, and common tasks
+- [docs/README.md](docs/README.md) — documentation index
+- [docs/app-spec.md](docs/app-spec.md) — shared app architecture and behavior
+- [docs/modules/english/](docs/modules/english/README.md) — English module docs
 
 ## Tech
 
