@@ -4,8 +4,9 @@ import ActivityLogPage from "../core/components/ActivityLogPage";
 import { useAppNavigation } from "../core/navigation";
 import { loadProgress } from "../core/storage";
 import englishModule from "../modules/english";
+import scienceModule from "../modules/science";
 
-const learningModules = [englishModule] as const;
+const learningModules = [englishModule, scienceModule] as const;
 
 type BeforeInstallPromptChoice = {
   outcome: "accepted" | "dismissed";

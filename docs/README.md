@@ -14,6 +14,8 @@ learning subject lives in `src/modules/`.
 - [English module](modules/english/README.md)
 - [English content guide](modules/english/content.md)
 - [English practice modes](modules/english/practice-modes.md)
+- [Science module](modules/science/README.md)
+- [Science content guide](modules/science/content.md)
 
 Root entry points:
 

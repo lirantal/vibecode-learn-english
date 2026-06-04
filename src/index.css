@@ -1255,3 +1255,163 @@ body {
   border-color: var(--surface2);
   opacity: 0.6;
 }
+
+/* ===== Science module ===== */
+.science-mode-btn {
+  display: flex;
+  min-height: 72px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  text-align: start;
+}
+
+.science-mode-btn span:last-child {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.science-root {
+  padding-bottom: 4px;
+}
+
+.science-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.science-hint {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.science-list {
+  list-style: none;
+  counter-reset: science;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.science-card {
+  counter-increment: science;
+  position: relative;
+  padding: 14px;
+  border: 1px solid var(--surface2);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.science-card::before {
+  content: counter(science) ".";
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-end: 14px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.science-card--correct {
+  border-color: rgba(34, 197, 94, 0.65);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.science-card--wrong {
+  border-color: rgba(248, 113, 113, 0.75);
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.science-prompt,
+.science-scenario {
+  margin: 0;
+  padding-inline-end: 26px;
+  color: var(--text);
+}
+
+.science-prompt {
+  font-size: clamp(1rem, 4.2vw, 1.16rem);
+  font-weight: 750;
+  line-height: 1.65;
+}
+
+.science-scenario {
+  margin-bottom: 8px;
+  color: var(--primary);
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.science-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.science-choice-bank,
+.science-sequence__bank,
+.science-sequence__answer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.science-choice {
+  direction: rtl;
+  text-align: center;
+}
+
+.science-sequence {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.science-sequence__answer {
+  min-height: 48px;
+  padding: 10px;
+  border: 1px dashed var(--surface2);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.25);
+}
+
+.science-chip {
+  min-height: 40px;
+  padding: 7px 11px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.science-chip:disabled {
+  opacity: 0.48;
+  cursor: default;
+}
+
+.science-chip--selected {
+  border-color: rgba(167, 139, 250, 0.65);
+  background: rgba(167, 139, 250, 0.16);
+}
+
+.science-check {
+  align-self: flex-start;
+  min-height: 42px;
+}
+
+.weak-list--rtl {
+  direction: rtl;
+  text-align: right;
+}
