@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type {
   AppView,
   GroupProgress,
@@ -6,10 +7,13 @@ import type {
   ModuleRoute,
   ScoreSnapshot,
 } from "../../core/types";
+import ChatGptStudyButton from "../../core/components/ChatGptStudyButton";
+import type { ChatGptStudyPromptResult } from "../../core/aiStudyPrompt";
 import { makeScoreSnapshot, scoreBadgeTone, scoreFromStats } from "../../core/score";
 import { setLastSelectedGroupId } from "../../core/storage";
 import SciencePracticeSession from "./components/SciencePracticeSession";
 import topicsData from "./data/topics.json";
+import { buildScienceFinalPrepPrompt } from "./lib/finalPrepPrompt";
 import { exerciseTotalForMode } from "./lib/score";
 import type {
   SciencePracticeMode,
@@ -104,10 +108,45 @@ function activityBadgesForTopic(
   }));
 }
 
-function renderHome({ progress, navigate }: ModuleRenderProps) {
+function isFinalPrepUnlocked(topic: ScienceTopic, progress: GroupProgress | undefined): boolean {
+  return activityBadgesForTopic(topic, progress).every((badge) => {
+    const score = scoreFromStats(badge.stats, badge.total);
+    return scoreBadgeTone(score) === "great";
+  });
+}
+
+function finalPrepMessage(result: ChatGptStudyPromptResult): string {
+  if (!result.copied) {
+    return "לא הצלחנו להעתיק את ההנחיה. נסו שוב, או פתחו את ChatGPT ידנית.";
+  }
+
+  if (!result.opened) {
+    return "ההנחיה הועתקה. פתחו את ChatGPT והדביקו אותה בצ׳אט כדי להתחיל.";
+  }
+
+  if (result.promptUrlTooLong) {
+    return "ההנחיה הועתקה ונפתח ChatGPT. בגלל אורך הנושא, הדביקו את ההנחיה בצ׳אט.";
+  }
+
+  return "ההנחיה הועתקה ונפתח ChatGPT. אם היא לא הופיעה אוטומטית, הדביקו אותה בצ׳אט.";
+}
+
+function ScienceHome({ progress, navigate }: Pick<ModuleRenderProps, "progress" | "navigate">) {
+  const [finalPrepMessages, setFinalPrepMessages] = useState<Record<string, string>>({});
+
   const pickTopic = (topic: ScienceTopic) => {
     setLastSelectedGroupId(MODULE_ID, topic.id);
     navigateToScienceRoute(navigate, { name: "pickMode", topicId: topic.id });
+  };
+
+  const setFinalPrepMessage = (
+    topicId: string,
+    result: ChatGptStudyPromptResult
+  ) => {
+    setFinalPrepMessages((current) => ({
+      ...current,
+      [topicId]: finalPrepMessage(result),
+    }));
   };
 
   return (
@@ -121,8 +160,11 @@ function renderHome({ progress, navigate }: ModuleRenderProps) {
           {topics.map((topic) => {
             const topicProgress = progress?.byGroup[topic.id];
             const activityBadges = activityBadgesForTopic(topic, topicProgress);
+            const isUnlocked = isFinalPrepUnlocked(topic, topicProgress);
+            const finalPrepStatus = finalPrepMessages[topic.id];
+
             return (
-              <li key={topic.id}>
+              <li key={topic.id} className="group-list-item">
                 <button
                   type="button"
                   className="group-card"
@@ -141,6 +183,19 @@ function renderHome({ progress, navigate }: ModuleRenderProps) {
                     ))}
                   </span>
                 </button>
+                {isUnlocked && (
+                  <div className="final-prep-action">
+                    <ChatGptStudyButton
+                      prompt={buildScienceFinalPrepPrompt(topic)}
+                      onResult={(result) => setFinalPrepMessage(topic.id, result)}
+                    />
+                    {finalPrepStatus && (
+                      <p className="final-prep-status" role="status">
+                        {finalPrepStatus}
+                      </p>
+                    )}
+                  </div>
+                )}
               </li>
             );
           })}
@@ -148,6 +203,10 @@ function renderHome({ progress, navigate }: ModuleRenderProps) {
       </main>
     </div>
   );
+}
+
+function renderHome({ progress, navigate }: ModuleRenderProps) {
+  return <ScienceHome progress={progress} navigate={navigate} />;
 }
 
 function renderModePicker(topic: ScienceTopic, navigate: Navigate) {

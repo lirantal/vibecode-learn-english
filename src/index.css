@@ -233,6 +233,12 @@ body {
   gap: 12px;
 }
 
+.group-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .group-card {
   width: 100%;
   min-height: var(--tap);
@@ -315,6 +321,65 @@ body {
   background: rgba(248, 113, 113, 0.12);
   color: var(--danger);
   border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.final-prep-action {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.final-prep-button {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid rgba(74, 222, 128, 0.34);
+  border-radius: 12px;
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--success);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.12s, transform 0.1s, border-color 0.12s;
+}
+
+.final-prep-button:active:not(:disabled) {
+  background: rgba(74, 222, 128, 0.2);
+  border-color: rgba(74, 222, 128, 0.55);
+  transform: scale(0.98);
+}
+
+.final-prep-button:focus-visible {
+  outline: 3px solid rgba(74, 222, 128, 0.35);
+  outline-offset: 3px;
+}
+
+.final-prep-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.final-prep-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+.final-prep-status {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--primary);
+  font-size: 0.84rem;
+  font-weight: 650;
+  line-height: 1.45;
 }
 
 /* ===== Activity log ===== */
