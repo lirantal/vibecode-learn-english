@@ -25,3 +25,23 @@ The canonical TypeScript schema is in:
 ```text
 src/modules/science/types.ts
 ```
+
+## Final-Prep Prompt Content
+
+Completed Science topics can unlock a `תרגול מסכם ב-ChatGPT` button. The prompt
+for that button is generated from the same topic JSON, so content authors should
+treat `topics.json` as both practice content and final-prep source material.
+
+The prompt builder includes:
+
+- Topic `title` and `description`.
+- Key concepts from `definitionChoice` terms and correct definitions.
+- Every `multipleChoice`, `wordBank`, `definitionChoice`, and `scenarioAnalysis`
+  item with only the correct answer.
+- Every `sequenceOrder` item with the `steps` array as the correct order.
+- Optional `explanation` and `hint` text when present.
+
+Write prompts, correct answers, explanations, and hints in clear Hebrew that can
+stand alone outside the exercise UI. Avoid relying on distractor choices for
+essential knowledge, because the final-prep prompt intentionally sends the
+correct answer key rather than every wrong option.

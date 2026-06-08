@@ -1,6 +1,6 @@
 const CHATGPT_URL = "https://chatgpt.com/";
 const CHATGPT_PROMPT_PARAM = "q";
-const MAX_CHATGPT_PROMPT_URL_LENGTH = 12000;
+const MAX_CHATGPT_PROMPT_URL_LENGTH = 100000;
 
 export type ChatGptStudyPromptResult = {
   copied: boolean;

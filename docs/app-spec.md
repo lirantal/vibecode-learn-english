@@ -27,6 +27,7 @@ src/
   app/
     App.tsx                    # App shell, navbar, install prompt, module picker
   core/
+    aiStudyPrompt.ts            # ChatGPT prompt URL, clipboard, and launch helpers
     components/ActivityLogPage.tsx
     hooks/useActivitySessionLogger.ts
     navigation.ts              # History-backed state navigation
@@ -35,6 +36,7 @@ src/
     types.ts                   # Shared app/core types
   modules/
     english/                   # English learning module
+    science/                   # Science learning module
   main.tsx                     # React root + service worker registration
   index.css                    # Shared stylesheet and module style sections
 ```
@@ -167,6 +169,23 @@ Each session records one activity entry through
 when unmounted after partial progress. The shared activity log resolves labels
 through each module's `modeLabels` map.
 
+## AI Study Prep Export
+
+The shared ChatGPT launch helper lives in `src/core/aiStudyPrompt.ts`. It builds
+a `https://chatgpt.com/?q=...` URL using `URL.searchParams`, attempts to copy the
+full prompt to the clipboard, and opens ChatGPT in a new tab. If the generated URL
+is extremely long, it falls back to opening plain `https://chatgpt.com/` and
+relies on the copied prompt.
+
+Module-specific prompt builders should stay inside the owning module because
+content schemas are module-owned. For example, Science builds its topic prompt in
+`src/modules/science/lib/finalPrepPrompt.ts` and passes the generated text into
+the shared `ChatGptStudyButton` component.
+
+The feature is intentionally clipboard-first: ChatGPT URL prefill depends on the
+student's browser/session state, while clipboard paste remains the reliable
+fallback after login or if prefill fails.
+
 ## PWA Behavior
 
 Production builds use `vite-plugin-pwa` in `vite.config.ts`:
@@ -197,6 +216,8 @@ prompt; iOS and unsupported browsers show Hebrew Add to Home Screen instructions
 | --- | --- |
 | Add English content | `src/modules/english/data/wordGroups.json` |
 | Add English exercise docs | `docs/modules/english/` |
+| Add Science content | `src/modules/science/data/topics.json` |
+| Change AI study prep launch behavior | `src/core/aiStudyPrompt.ts` |
 | Add a new subject module | `src/modules/<module>/` and register it in `src/app/App.tsx` |
 | Change persistence | `src/core/storage.ts` |
 | Change scoring primitives | `src/core/score.ts` |
