@@ -1,6 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
-import type { WordGroup } from "../types";
-import { updateGroupModeStats } from "../lib/storage";
+import { useCallback, useMemo, useRef, useState } from "react";
+import type { ScoreSnapshot } from "../../../core/types";
+import type { WordListGroup } from "../types";
+import { makeScoreSnapshot } from "../../../core/score";
+import { updateGroupModeStats } from "../../../core/storage";
+import { useActivitySessionLogger } from "../../../core/hooks/useActivitySessionLogger";
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -12,7 +15,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 type Props = {
-  group: WordGroup;
+  group: WordListGroup;
   onRepeatSame: () => void;
   onChangeMode: () => void;
   onHome: () => void;
@@ -29,25 +32,50 @@ export default function FlashcardSession({
   const [flipped, setFlipped] = useState(false);
   const [needMore, setNeedMore] = useState<string[]>([]);
   const [phase, setPhase] = useState<"run" | "summary">("run");
+  const completedRef = useRef(0);
+  const correctRef = useRef(0);
+  const weakRef = useRef<string[]>([]);
 
   const current = deck[index];
   const isLast = index >= deck.length - 1;
+  const currentScore = useCallback(
+    (): ScoreSnapshot =>
+      makeScoreSnapshot({
+        correctCount: correctRef.current,
+        completedCount: completedRef.current,
+        totalCount: deck.length,
+        errorCount: weakRef.current.length,
+      }),
+    [deck.length]
+  );
+  const logActivitySession = useActivitySessionLogger({
+    moduleId: "english",
+    groupId: group.id,
+    groupTitle: group.title,
+    mode: "flashcard",
+    getItemCount: () => completedRef.current,
+    getScoreSnapshot: currentScore,
+  });
 
   const persist = useCallback(
-    (weak: string[], known: number, total: number) => {
+    (weak: string[], known: number, completed: number) => {
       updateGroupModeStats(
+        "english",
         group.id,
         "flashcard",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: known,
-          lastScoreDenominator: total,
-          lastWeakEn: weak,
+          lastScoreDenominator: deck.length,
+          lastWeakItems: weak,
+          lastCompletedCount: completed,
+          lastTotalCount: deck.length,
+          lastErrorCount: weak.length,
         },
         group.id
       );
     },
-    [group.id]
+    [deck.length, group.id]
   );
 
   const finishCard = (rating: "know" | "more") => {
@@ -57,9 +85,21 @@ export default function FlashcardSession({
     const wordsSoFar = index + 1;
     const known = wordsSoFar - newWeak.length;
 
+    completedRef.current = wordsSoFar;
+    correctRef.current = known;
+    weakRef.current = newWeak;
     persist(newWeak, known, wordsSoFar);
 
     if (isLast) {
+      logActivitySession(
+        wordsSoFar,
+        makeScoreSnapshot({
+          correctCount: known,
+          completedCount: wordsSoFar,
+          totalCount: deck.length,
+          errorCount: newWeak.length,
+        })
+      );
       setNeedMore(newWeak);
       setPhase("summary");
       return;

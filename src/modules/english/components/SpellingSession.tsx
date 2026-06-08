@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { WordGroup } from "../types";
+import type { ScoreSnapshot } from "../../../core/types";
+import type { WordListGroup } from "../types";
 import {
   answersMatch,
   normalizeEn,
   wordleFeedback,
   type LetterFeedback,
 } from "../lib/normalize";
+import { makeScoreSnapshot } from "../../../core/score";
 import { cancelSpeech, ensureVoicesLoaded, speakEnglish } from "../lib/tts";
-import { updateGroupModeStats } from "../lib/storage";
+import { updateGroupModeStats } from "../../../core/storage";
 import OnScreenKeyboard from "./OnScreenKeyboard";
+import { useActivitySessionLogger } from "../../../core/hooks/useActivitySessionLogger";
 
 /** Successful solve after this many attempts (including the correct one) → practice-more list. */
 const WEAK_TRY_THRESHOLD = 4;
@@ -27,7 +30,7 @@ function initSlots(canonical: string): string[] {
 }
 
 type Props = {
-  group: WordGroup;
+  group: WordListGroup;
   onRepeatSame: () => void;
   onChangeMode: () => void;
   onHome: () => void;
@@ -54,9 +57,28 @@ export default function SpellingSession({
 
   const correctRef = useRef(0);
   const weakRef = useRef<string[]>([]);
+  const completedRef = useRef(0);
 
   const word = deck[wordIndex];
   const isLast = wordIndex >= deck.length - 1;
+  const currentScore = useCallback(
+    (): ScoreSnapshot =>
+      makeScoreSnapshot({
+        correctCount: correctRef.current,
+        completedCount: completedRef.current,
+        totalCount: deck.length,
+        errorCount: weakRef.current.length,
+      }),
+    [deck.length]
+  );
+  const logActivitySession = useActivitySessionLogger({
+    moduleId: "english",
+    groupId: group.id,
+    groupTitle: group.title,
+    mode: "spelling",
+    getItemCount: () => completedRef.current,
+    getScoreSnapshot: currentScore,
+  });
 
   const filledGuess = useMemo(() => slots.join(""), [slots]);
 
@@ -82,29 +104,40 @@ export default function SpellingSession({
   }, [canonical]);
 
   const persist = useCallback(
-    (weak: string[], correct: number, total: number) => {
+    (weak: string[], correct: number, completed: number) => {
       updateGroupModeStats(
+        "english",
         group.id,
         "spelling",
         {
           lastRunAt: new Date().toISOString(),
           lastScoreNumerator: correct,
-          lastScoreDenominator: total,
-          lastWeakEn: weak,
+          lastScoreDenominator: deck.length,
+          lastWeakItems: weak,
+          lastCompletedCount: completed,
+          lastTotalCount: deck.length,
+          lastErrorCount: weak.length,
         },
         group.id
       );
     },
-    [group.id]
+    [deck.length, group.id]
   );
 
   const goSummary = useCallback(
     (weak: string[], correct: number) => {
+      const score = makeScoreSnapshot({
+        correctCount: correct,
+        completedCount: deck.length,
+        totalCount: deck.length,
+        errorCount: weak.length,
+      });
+      logActivitySession(deck.length, score);
       persist(weak, correct, deck.length);
       setWeakList(weak);
       setPhase("summary");
     },
-    [persist, deck.length]
+    [logActivitySession, persist, deck.length]
   );
 
   const advanceAfterCorrect = useCallback(() => {
@@ -128,6 +161,7 @@ export default function SpellingSession({
         weakRef.current = [...weakRef.current, displayEn];
       }
       correctRef.current += 1;
+      completedRef.current = wordIndex + 1;
 
       setShowingSuccess(true);
       setFeedback(canonical.split("").map(() => "correct" as const));
@@ -146,6 +180,7 @@ export default function SpellingSession({
     filledGuess,
     canonical,
     triesThisWord,
+    wordIndex,
     advanceAfterCorrect,
   ]);
 
@@ -153,6 +188,7 @@ export default function SpellingSession({
     if (showingSuccess) return;
     const displayEn = word.en.trim();
     weakRef.current = [...weakRef.current, displayEn];
+    completedRef.current = wordIndex + 1;
     if (isLast) {
       goSummary([...weakRef.current], correctRef.current);
       return;

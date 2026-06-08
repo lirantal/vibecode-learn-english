@@ -1,0 +1,803 @@
+{
+  "groups": [
+    {
+      "id": "sample-grade7-01",
+      "title": "מילים — שבוע 1",
+      "words": [
+        { "en": "Away", "he": "רחוק,הרחק" },
+        { "en": "Come back", "he": "לחזור" },
+        { "en": "Cook", "he": "לבשל" },
+        { "en": "Country", "he": "מדינה" },
+        { "en": "Either", "he": "או" },
+        { "en": "Feed", "he": "להאכיל" },
+        { "en": "Field", "he": "שדה" },
+        { "en": "Hate", "he": "לשנוא" },
+        { "en": "Middle", "he": "אמצע" },
+        { "en": "Moment", "he": "רגע" }
+      ]
+    },
+    {
+      "id": "sample-grade7-02",
+      "title": "מילים — שבוע 2",
+      "words": [
+        { "en": "All sorts of", "he": "כל מיני" },
+        { "en": "Grow up", "he": "לגדול, להתבגר" },
+        { "en": "Most", "he": "רוב" },
+        { "en": "Reading", "he": "קריאה" },
+        { "en": "Walk", "he": "טיול רגלי, הליכה" },
+        { "en": "Alone", "he": "לבד" },
+        { "en": "Job", "he": "עבודה, תפקיד" },
+        { "en": "Online", "he": "באינטרנט" },
+        { "en": "Remind", "he": "להזכיר" },
+        { "en": "While", "he": "בזמן, כאשר" },
+        { "en": "Except for", "he": "חוץ מ-" },
+        { "en": "Join", "he": "להצטרף" },
+        { "en": "Pick something up", "he": "להרים (משהו)" },
+        { "en": "Soap", "he": "סבון" }
+      ]
+    },
+    {
+      "id": "sample-grade7-03",
+      "title": "מילים — שבוע 3",
+      "words": [
+        { "en": "As ... as", "he": "כמו" },
+        { "en": "Imagine", "he": "לדמיין" },
+        { "en": "Police officer", "he": "שוטר/ת" },
+        { "en": "Spare time", "he": "זמן פנוי, פנאי" },
+        { "en": "Dream", "he": "חלום" },
+        { "en": "Helicopter", "he": "מסוק" },
+        { "en": "Model", "he": "דגם" },
+        { "en": "Project", "he": "פרויקט, מיזם" },
+        { "en": "Very much", "he": "מאוד" },
+        { "en": "During", "he": "במשך" },
+        { "en": "Huge", "he": "ענק" },
+        { "en": "Piece", "he": "חלק, חתיכה" },
+        { "en": "Size", "he": "גודל, מידה" }
+      ]
+    },
+    {
+      "id": "sample-grade7-04",
+      "title": "מילים — שבוע 4",
+      "words": [
+        { "en": "Badly", "he": "קשה, מאוד" },
+        { "en": "Die", "he": "למות" },
+        { "en": "Let", "he": "להרשות" },
+        { "en": "Person", "he": "אדם" },
+        { "en": "Type", "he": "סוג" },
+        { "en": "Close", "he": "קרוב" },
+        { "en": "Engine", "he": "מנוע" },
+        { "en": "Life", "he": "חיים" },
+        { "en": "Possible", "he": "אפשרי" },
+        { "en": "University", "he": "אוניברסיטה" },
+        { "en": "Danger", "he": "סכנה" },
+        { "en": "Had", "he": "היה (ל-)" },
+        { "en": "Once", "he": "פעם" },
+        { "en": "Speaker", "he": "נואם" },
+        { "en": "Went", "he": "הלך" }
+      ]
+    },
+    {
+      "id": "sample-grade7-05",
+      "title": "מילים — שבוע 5",
+      "words": [
+        { "en": "Away", "he": "למקום אחר" },
+        { "en": "Country", "he": "אזור כפרי" },
+        { "en": "Field", "he": "שדה" },
+        { "en": "Middle", "he": "אמצע" },
+        { "en": "Mrs.", "he": "גברת" },
+        { "en": "Come back", "he": "לחזור" },
+        { "en": "Either", "he": "או, גם" },
+        { "en": "Hate", "he": "לשנוא" },
+        { "en": "Moment", "he": "רגע" },
+        { "en": "Pack", "he": "לארוז" },
+        { "en": "Cook (n)", "he": "טבח" },
+        { "en": "Feed", "he": "להאכיל" },
+        { "en": "Look after", "he": "לטפל ב-" },
+        { "en": "Mr.", "he": "מר" },
+        { "en": "Worker", "he": "עובד, פועל" }
+      ]
+    },
+    {
+      "id": "sample-grade7-06",
+      "title": "מילים — שבוע 6",
+      "words": [
+        { "en": "Along", "he": "לאורך" },
+        { "en": "Explain", "he": "להסביר" },
+        { "en": "No one", "he": "אף אחד" },
+        { "en": "Pleasant", "he": "נעים" },
+        { "en": "Till", "he": "עד ש-" },
+        { "en": "Countryside", "he": "אזור כפרי" },
+        { "en": "Extra", "he": "נוסף" },
+        { "en": "No problem", "he": "אין בעיה" },
+        { "en": "Surprised", "he": "מופתע" },
+        { "en": "Decision", "he": "החלטה" },
+        { "en": "Happy to do", "he": "שמח לעשות (משהו)" },
+        { "en": "Pay", "he": "לשלם" },
+        { "en": "Through", "he": "דרך" }
+      ]
+    },
+    {
+      "id": "cool-unit2-matching-01",
+      "title": "Cool Unit 2 — חיבור תרגומים 1",
+      "exerciseType": "matching",
+      "words": [
+        { "en": "Movie", "he": "סרט" },
+        { "en": "Detective", "he": "בלש" },
+        { "en": "Writer", "he": "סופר" },
+        { "en": "Wolf", "he": "זאב" },
+        { "en": "Forest", "he": "יער" },
+        { "en": "Clothes", "he": "בגדים" },
+        { "en": "Fairy", "he": "פיה" },
+        { "en": "Sun", "he": "שמש" },
+        { "en": "Flower", "he": "פרח" },
+        { "en": "Diary", "he": "יומן" }
+      ]
+    },
+    {
+      "id": "cool-unit2-matching-02",
+      "title": "Cool Unit 2 — חיבור תרגומים 2",
+      "exerciseType": "matching",
+      "words": [
+        { "en": "Dangerous", "he": "מסוכן" },
+        { "en": "False", "he": "שקרי" },
+        { "en": "Dish", "he": "צלחת" },
+        { "en": "Hero", "he": "גיבור" },
+        { "en": "Safe", "he": "בטוח" },
+        { "en": "Always", "he": "תמיד" },
+        { "en": "Same", "he": "אותו דבר" },
+        { "en": "True", "he": "אמת" },
+        { "en": "Large", "he": "גדול" },
+        { "en": "Villain", "he": "רשע" }
+      ]
+    },
+    {
+      "id": "cool-unit2-matching-03",
+      "title": "Cool Unit 2 — חיבור תרגומים 3",
+      "exerciseType": "matching",
+      "words": [
+        { "en": "Opinion", "he": "דעה" },
+        { "en": "Fact", "he": "עובדה" },
+        { "en": "Late", "he": "מאוחר" },
+        { "en": "Different", "he": "שונה" },
+        { "en": "Never", "he": "לעולם לא" }
+      ]
+    },
+    {
+      "id": "possessives-my-day-01",
+      "title": "מילות שייכות — My day",
+      "exerciseType": "storyCloze",
+      "storyTitle": "My day",
+      "story": "Every morning I wake up, eat my breakfast and clean my room. My little sister has a golden fish. She feeds her fish every day. I have a little dog. Its legs are black and I feed him every day. Then we go to our school. Our school is big and nice. My teachers are wonderful. They have special ways to teach me English. Their ways are fun. After school my mom picks me up. We usually go to our house. We eat lunch and do homework. Then we come back to school and pick up my little sister. Her teacher is very nice. She always smiles and looks happy.",
+      "targetWords": ["my", "her", "its", "our", "their"],
+      "blanks": [
+        {
+          "prefix": "I live in a big house. ",
+          "suffix": " house is nice.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "My",
+          "hintHe": "הבית שייך לי."
+        },
+        {
+          "prefix": "She lives in a small house. ",
+          "suffix": " house is in the city.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "הבית שייך לה."
+        },
+        {
+          "prefix": "Ron has a dog. ",
+          "suffix": " dog is brown.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "His",
+          "hintHe": "הכלב שייך לרון."
+        },
+        {
+          "prefix": "Linda has a baby. ",
+          "suffix": " baby is one year old.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "התינוק שייך ללינדה."
+        },
+        {
+          "prefix": "The dog has black legs. ",
+          "suffix": " legs are black.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Its",
+          "hintHe": "הרגליים שייכות לכלב."
+        },
+        {
+          "prefix": "We go to school. ",
+          "suffix": " school is big.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Our",
+          "hintHe": "בית הספר שייך לנו."
+        },
+        {
+          "prefix": "My teachers have special ways. ",
+          "suffix": " ways are fun.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Their",
+          "hintHe": "הדרכים שייכות למורים."
+        }
+      ]
+    },
+    {
+      "id": "possessives-class-trip-02",
+      "title": "מילות שייכות — Class trip",
+      "exerciseType": "storyCloze",
+      "storyTitle": "Class trip",
+      "story": "Today our class goes on a trip. I pack my blue bag and my water bottle. You bring your camera and your notebook. Ben wears his red hat because the sun is hot. Maya brings her sandwiches and her small radio. The bus is yellow, and its wheels are clean. Our teacher gives us a map, and our friends sit near us. The guides show their tickets and tell us their plan for the day. Everyone is happy because the trip is fun.",
+      "targetWords": ["my", "your", "his", "her", "its", "our", "their"],
+      "blanks": [
+        {
+          "prefix": "I pack a blue bag. ",
+          "suffix": " bag is blue.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "My",
+          "hintHe": "התיק שייך לי."
+        },
+        {
+          "prefix": "You bring a camera. ",
+          "suffix": " camera is small.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Your",
+          "hintHe": "המצלמה שייכת לך."
+        },
+        {
+          "prefix": "Ben wears a red hat. ",
+          "suffix": " hat is red.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "His",
+          "hintHe": "הכובע שייך לבן."
+        },
+        {
+          "prefix": "Maya brings sandwiches. ",
+          "suffix": " sandwiches are fresh.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "הכריכים שייכים למאיה."
+        },
+        {
+          "prefix": "The bus has clean wheels. ",
+          "suffix": " wheels are clean.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Its",
+          "hintHe": "הגלגלים שייכים לאוטובוס."
+        },
+        {
+          "prefix": "We have a teacher. ",
+          "suffix": " teacher gives us a map.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Our",
+          "hintHe": "המורה שייכת לקבוצה שלנו."
+        },
+        {
+          "prefix": "The guides have tickets. ",
+          "suffix": " tickets are ready.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Their",
+          "hintHe": "הכרטיסים שייכים למדריכים."
+        }
+      ]
+    },
+    {
+      "id": "possessives-birthday-party-03",
+      "title": "מילות שייכות — Birthday party",
+      "exerciseType": "storyCloze",
+      "storyTitle": "Birthday party",
+      "story": "On Saturday our family has a birthday party. I make my card for Grandma. You bring your guitar because you like to sing. Tom decorates his chocolate cake with blue candles. Sarah opens her gifts and puts her flowers on the table. The cat sleeps in its basket while the music plays. Our parents take pictures of everyone. The children wear party hats, and their hats are full of stars. At the end, we all clean the room together.",
+      "targetWords": ["my", "your", "his", "her", "its", "our", "their"],
+      "blanks": [
+        {
+          "prefix": "I make a card. ",
+          "suffix": " card is for Grandma.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "My",
+          "hintHe": "הכרטיס שייך לי."
+        },
+        {
+          "prefix": "You bring a guitar. ",
+          "suffix": " guitar is brown.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Your",
+          "hintHe": "הגיטרה שייכת לך."
+        },
+        {
+          "prefix": "Tom decorates a cake. ",
+          "suffix": " cake has blue candles.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "His",
+          "hintHe": "העוגה שייכת לטום."
+        },
+        {
+          "prefix": "Sarah opens gifts. ",
+          "suffix": " gifts are on the table.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Her",
+          "hintHe": "המתנות שייכות לשרה."
+        },
+        {
+          "prefix": "The cat has a basket. ",
+          "suffix": " basket is soft.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Its",
+          "hintHe": "הסל שייך לחתול."
+        },
+        {
+          "prefix": "We have a family party. ",
+          "suffix": " party is fun.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Our",
+          "hintHe": "המסיבה שייכת למשפחה שלנו."
+        },
+        {
+          "prefix": "The children wear party hats. ",
+          "suffix": " hats are full of stars.",
+          "choices": ["My", "Your", "His", "Her", "Its", "Our", "Their"],
+          "correctChoice": "Their",
+          "hintHe": "הכובעים שייכים לילדים."
+        }
+      ]
+    },
+    {
+      "id": "grammar-present-simple-negative-01",
+      "title": "דקדוק — don't / doesn't",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " like ice cream.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "He ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have time.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "We ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " eat fruit.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "They ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " watch TV.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "The car ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " work.",
+          "correctChoice": "doesn't"
+        }
+      ]
+    },
+    {
+      "id": "grammar-present-simple-questions-01",
+      "title": "דקדוק — Do / Does",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " you eat pasta?",
+          "correctChoice": "Do"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " they go home?",
+          "correctChoice": "Do"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " we meet friends?",
+          "correctChoice": "Do"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " she help your sister?",
+          "correctChoice": "Does"
+        },
+        {
+          "prefix": "",
+          "choices": ["Do", "Does"],
+          "suffix": " the dog bark every night?",
+          "correctChoice": "Does"
+        }
+      ]
+    },
+    {
+      "id": "grammar-present-simple-negative-02",
+      "title": "דקדוק — don't / doesn't 2",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "Pupils ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " go to school at night.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "A vet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " take care of kids.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "Tina ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " work on Mondays.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "Dogs ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " eat chocolate.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "The baby ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a telephone.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "Monkeys ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " read books.",
+          "correctChoice": "don't"
+        }
+      ]
+    },
+    {
+      "id": "grammar-present-simple-negative-keywords-01",
+      "title": "דקדוק — משפטים עם don't / doesn't",
+      "exerciseType": "grammarChoice",
+      "sentences": [
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My sister and I ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My brother ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My pet ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My neighbor ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "doesn't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My parents ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "My friends ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play football.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " bake cookies.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " drive a car.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " play computer games.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " sleep in the afternoon.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " walk to school every day.",
+          "correctChoice": "don't"
+        },
+        {
+          "prefix": "You ",
+          "choices": ["don't", "doesn't"],
+          "suffix": " have a pet.",
+          "correctChoice": "don't"
+        }
+      ]
+    }
+  ]
+}
