@@ -19,6 +19,7 @@ trustPolicy: no-downgrade
 # trustPolicyIgnoreAfter: 43200
 
 allowBuilds:
+  '@swc/core': true
   esbuild: true
   rolldown: true
   unrs-resolver: true
