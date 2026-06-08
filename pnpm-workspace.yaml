@@ -28,3 +28,10 @@ strictDepBuilds: true
 
 # Block exotic subdependencies such as those pulled from  Git sources
 blockExoticSubdeps: true
+
+# Force policy-compliant versions for transitive dependencies
+overrides:
+  path-scurry>lru-cache: 11.3.6
+  semver: 6.3.0
+  smob: 1.6.1
+  '@trickfilm400/rollup-plugin-off-main-thread': 2.4.3
