@@ -1,5 +1,5 @@
 import { defineConfig, loadEnv, type PluginOption } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
 
 function normalizeSiteUrl(value: string | undefined): string {
