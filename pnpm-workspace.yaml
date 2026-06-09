@@ -1,0 +1,22 @@
+# npm security best practices
+# Source: https://github.com/lirantal/npm-security-best-practices
+
+# Require packages to be at least 30 days old before new resolution.
+minimumReleaseAge: 43200
+
+# Fail installs when a package's registry trust evidence downgrades.
+trustPolicy: no-downgrade
+
+# Explicitly approve dependency build scripts required by the current graph.
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
+  rolldown: true
+  unrs-resolver: true
+
+overrides:
+  '@trickfilm400/rollup-plugin-off-main-thread': 2.5.0
+  semver: 7.7.4
+
+strictDepBuilds: true
+blockExoticSubdeps: true
