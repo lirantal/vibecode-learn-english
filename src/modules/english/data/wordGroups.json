@@ -117,6 +117,81 @@
       ]
     },
     {
+      "id": "sample-grade7-07",
+      "title": "מילים — שבוע 7",
+      "words": [
+        { "en": "Popular", "he": "פופולרי" },
+        { "en": "Ancient", "he": "עתיק" },
+        { "en": "Since", "he": "מאז" },
+        { "en": "Athletes", "he": "ספורטאים" },
+        { "en": "Spectators", "he": "צופים" },
+        { "en": "Equipment", "he": "ציוד" },
+        { "en": "Helmets", "he": "קסדות" },
+        { "en": "Rackets", "he": "מחבטים" },
+        { "en": "Lighter", "he": "קל יותר" },
+        { "en": "Bathing suit", "he": "בגד ים" }
+      ]
+    },
+    {
+      "id": "sample-grade7-08",
+      "title": "מילים — שבוע 8",
+      "words": [
+        { "en": "Coach", "he": "מאמן" },
+        { "en": "Improve", "he": "לשפר" },
+        { "en": "Avoid", "he": "להימנע מ-" },
+        { "en": "Abroad", "he": "בחוץ לארץ" },
+        { "en": "Awake", "he": "ער" },
+        { "en": "Aware", "he": "מודע" },
+        { "en": "Behave", "he": "להתנהג" },
+        { "en": "Brain", "he": "מוח" },
+        { "en": "Certain", "he": "מסוים, בטוח" },
+        { "en": "Control", "he": "שליטה, לשלוט" }
+      ]
+    },
+    {
+      "id": "sample-grade7-09",
+      "title": "מילים — שבוע 9",
+      "words": [
+        { "en": "Environment", "he": "סביבה" },
+        { "en": "Experience", "he": "חוויה, ניסיון" },
+        { "en": "Feelings", "he": "רגשות" },
+        { "en": "Friendly", "he": "ידידותי" },
+        { "en": "Frightened", "he": "מפוחד" },
+        { "en": "Imagine", "he": "לדמיין" },
+        { "en": "Information", "he": "מידע" },
+        { "en": "Laboratory", "he": "מעבדה" },
+        { "en": "Laugh", "he": "לצחוק" },
+        { "en": "Mind", "he": "מחשבה, שכל" }
+      ]
+    },
+    {
+      "id": "sample-grade7-10",
+      "title": "מילים — שבוע 10",
+      "words": [
+        { "en": "Reason", "he": "סיבה" },
+        { "en": "Receive", "he": "לקבל" },
+        { "en": "Recent", "he": "מהזמן האחרון" },
+        { "en": "Regular", "he": "רגיל, קבוע" },
+        { "en": "Result", "he": "תוצאה" },
+        { "en": "Safe", "he": "בטוח" },
+        { "en": "Scary", "he": "מפחיד" },
+        { "en": "Scientist", "he": "מדען" },
+        { "en": "Screen", "he": "מסך" },
+        { "en": "Stranger", "he": "זר, אדם זר" }
+      ]
+    },
+    {
+      "id": "sample-grade7-11",
+      "title": "מילים — שבוע 11",
+      "words": [
+        { "en": "Study", "he": "ללמוד" },
+        { "en": "Subject", "he": "מקצוע, נושא" },
+        { "en": "Strange", "he": "מוזר" },
+        { "en": "Thought", "he": "מחשבה" },
+        { "en": "Touch", "he": "לגעת" }
+      ]
+    },
+    {
       "id": "cool-unit2-matching-01",
       "title": "Cool Unit 2 — חיבור תרגומים 1",
       "exerciseType": "matching",
