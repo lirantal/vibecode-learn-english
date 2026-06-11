@@ -7,9 +7,16 @@ export type Word = {
 
 export type GrammarChoiceSentence = {
   prefix: string;
-  choices: [string, string];
+  choices: string[];
   suffix: string;
   correctChoice: string;
+};
+
+export type PronounWritingSentence = {
+  prefix: string;
+  target: string;
+  suffix: string;
+  correctPronoun: string;
 };
 
 export type StoryClozeBlank = {
@@ -38,7 +45,16 @@ export type GrammarChoiceGroup = {
   id: string;
   title: string;
   exerciseType: "grammarChoice";
+  itemsPerRun?: number;
   sentences: GrammarChoiceSentence[];
+};
+
+export type PronounWritingGroup = {
+  id: string;
+  title: string;
+  exerciseType: "pronounWriting";
+  itemsPerRun?: number;
+  sentences: PronounWritingSentence[];
 };
 
 export type StoryClozeGroup = {
@@ -55,6 +71,7 @@ export type WordGroup =
   | WordListGroup
   | MatchingGroup
   | GrammarChoiceGroup
+  | PronounWritingGroup
   | StoryClozeGroup;
 
 export type WordGroupsFile = {
@@ -66,6 +83,7 @@ export type EnglishPracticeMode =
   | "spelling"
   | "matching"
   | "grammarChoice"
+  | "pronounWriting"
   | "storyCloze";
 
 export type EnglishGroupProgress = Partial<Record<EnglishPracticeMode, ModeStats>>;
@@ -76,4 +94,5 @@ export type EnglishRoute =
   | { name: "spelling"; groupId: string }
   | { name: "matching"; groupId: string }
   | { name: "grammarChoice"; groupId: string }
+  | { name: "pronounWriting"; groupId: string }
   | { name: "storyCloze"; groupId: string };

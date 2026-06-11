@@ -192,6 +192,346 @@
       ]
     },
     {
+      "id": "mofet-articles-practice-01",
+      "title": "מופת — Articles Practice 1",
+      "exerciseType": "grammarChoice",
+      "itemsPerRun": 10,
+      "sentences": [
+        {
+          "prefix": "I saw ",
+          "choices": ["a", "an", "the"],
+          "suffix": " elephant at the zoo yesterday.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "We visited ",
+          "choices": ["a", "an", "the"],
+          "suffix": " museum near our school.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "My father is ",
+          "choices": ["a", "an", "the"],
+          "suffix": " engineer.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "She bought ",
+          "choices": ["a", "an", "the"],
+          "suffix": " book at the store.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "He ate ",
+          "choices": ["a", "an", "the"],
+          "suffix": " apple after lunch.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "Please close ",
+          "choices": ["a", "an", "the"],
+          "suffix": " door.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "They live in ",
+          "choices": ["a", "an", "the"],
+          "suffix": " small house.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "I need ",
+          "choices": ["a", "an", "the"],
+          "suffix": " umbrella because it is raining.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "Look at ",
+          "choices": ["a", "an", "the"],
+          "suffix": " moon tonight.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "Dana has ",
+          "choices": ["a", "an", "the"],
+          "suffix": " dog and a cat.",
+          "correctChoice": "a"
+        }
+      ]
+    },
+    {
+      "id": "mofet-articles-practice-02",
+      "title": "מופת — Articles Practice 2",
+      "exerciseType": "grammarChoice",
+      "itemsPerRun": 10,
+      "sentences": [
+        {
+          "prefix": "We stayed at ",
+          "choices": ["a", "an", "the"],
+          "suffix": " hotel where my parents got married.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "They visited ",
+          "choices": ["a", "an", "the"],
+          "suffix": " United States last summer.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "I have never seen ",
+          "choices": ["a", "an", "the"],
+          "suffix": " owl before.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "She wore ",
+          "choices": ["a", "an", "the"],
+          "suffix": " uniform to school.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "I read ",
+          "choices": ["a", "an", "the"],
+          "suffix": " article that you told me about.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "My uncle is ",
+          "choices": ["a", "an", "the"],
+          "suffix": " honest man.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "We had ",
+          "choices": ["a", "an", "the"],
+          "suffix": " one-hour meeting after lunch.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "The teacher gave us ",
+          "choices": ["a", "an", "the"],
+          "suffix": " useful tip.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "I left my bag on ",
+          "choices": ["a", "an", "the"],
+          "suffix": " bus that goes to Jerusalem.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "She is ",
+          "choices": ["a", "an", "the"],
+          "suffix": " only student who finished early.",
+          "correctChoice": "the"
+        }
+      ]
+    },
+    {
+      "id": "mofet-articles-practice-03",
+      "title": "מופת — Articles Practice 3",
+      "exerciseType": "grammarChoice",
+      "itemsPerRun": 10,
+      "sentences": [
+        {
+          "prefix": "He wants to be ",
+          "choices": ["a", "an", "the"],
+          "suffix": " artist.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "We crossed ",
+          "choices": ["a", "an", "the"],
+          "suffix": " bridge near the old city.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "There is ",
+          "choices": ["a", "an", "the"],
+          "suffix": " university next to the hospital.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "I found ",
+          "choices": ["a", "an", "the"],
+          "suffix": " old key in the garden.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "",
+          "choices": ["A", "An", "The"],
+          "suffix": " sun was bright this morning.",
+          "correctChoice": "The"
+        },
+        {
+          "prefix": "My sister plays ",
+          "choices": ["a", "an", "the"],
+          "suffix": " piano.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "They saw ",
+          "choices": ["a", "an", "the"],
+          "suffix": " European city on the map.",
+          "correctChoice": "a"
+        },
+        {
+          "prefix": "This is ",
+          "choices": ["a", "an", "the"],
+          "suffix": " best answer.",
+          "correctChoice": "the"
+        },
+        {
+          "prefix": "We need ",
+          "choices": ["a", "an", "the"],
+          "suffix": " hour to finish.",
+          "correctChoice": "an"
+        },
+        {
+          "prefix": "She adopted ",
+          "choices": ["a", "an", "the"],
+          "suffix": " cat from the shelter.",
+          "correctChoice": "a"
+        }
+      ]
+    },
+    {
+      "id": "mofet-pronouns-practice-01",
+      "title": "מופת — Pronouns Practice 1",
+      "exerciseType": "pronounWriting",
+      "itemsPerRun": 10,
+      "sentences": [
+        {
+          "prefix": "",
+          "target": "John",
+          "suffix": " is the floor manager.",
+          "correctPronoun": "He"
+        },
+        {
+          "prefix": "",
+          "target": "Ricardo",
+          "suffix": " really likes Mary.",
+          "correctPronoun": "He"
+        },
+        {
+          "prefix": "",
+          "target": "Maya",
+          "suffix": " plays tennis every Friday.",
+          "correctPronoun": "She"
+        },
+        {
+          "prefix": "",
+          "target": "The dog",
+          "suffix": " sleeps under the table.",
+          "correctPronoun": "It"
+        },
+        {
+          "prefix": "",
+          "target": "My parents",
+          "suffix": " work in Tel Aviv.",
+          "correctPronoun": "They"
+        },
+        {
+          "prefix": "",
+          "target": "Tom and Ben",
+          "suffix": " are on the school team.",
+          "correctPronoun": "They"
+        },
+        {
+          "prefix": "",
+          "target": "Sarah",
+          "suffix": " studies English after dinner.",
+          "correctPronoun": "She"
+        },
+        {
+          "prefix": "",
+          "target": "The computer",
+          "suffix": " is on the desk.",
+          "correctPronoun": "It"
+        },
+        {
+          "prefix": "",
+          "target": "My brother",
+          "suffix": " can ride a bike.",
+          "correctPronoun": "He"
+        },
+        {
+          "prefix": "",
+          "target": "The students",
+          "suffix": " are ready for the test.",
+          "correctPronoun": "They"
+        }
+      ]
+    },
+    {
+      "id": "mofet-pronouns-practice-02",
+      "title": "מופת — Pronouns Practice 2",
+      "exerciseType": "pronounWriting",
+      "itemsPerRun": 10,
+      "sentences": [
+        {
+          "prefix": "",
+          "target": "Dana and I",
+          "suffix": " walk to school together.",
+          "correctPronoun": "We"
+        },
+        {
+          "prefix": "",
+          "target": "The baby",
+          "suffix": " is sleeping now.",
+          "correctPronoun": "It"
+        },
+        {
+          "prefix": "",
+          "target": "You and Ron",
+          "suffix": " should finish the project today.",
+          "correctPronoun": "You"
+        },
+        {
+          "prefix": "",
+          "target": "Mrs. Cohen",
+          "suffix": " teaches science.",
+          "correctPronoun": "She"
+        },
+        {
+          "prefix": "",
+          "target": "The children",
+          "suffix": " are playing outside.",
+          "correctPronoun": "They"
+        },
+        {
+          "prefix": "",
+          "target": "My sister and I",
+          "suffix": " made dinner.",
+          "correctPronoun": "We"
+        },
+        {
+          "prefix": "",
+          "target": "The old house",
+          "suffix": " is near the river.",
+          "correctPronoun": "It"
+        },
+        {
+          "prefix": "",
+          "target": "Mr. Levi",
+          "suffix": " drives the bus every morning.",
+          "correctPronoun": "He"
+        },
+        {
+          "prefix": "",
+          "target": "The girls",
+          "suffix": " won the game.",
+          "correctPronoun": "They"
+        },
+        {
+          "prefix": "",
+          "target": "I",
+          "suffix": " am learning new words.",
+          "correctPronoun": "I"
+        }
+      ]
+    },
+    {
       "id": "cool-unit2-matching-01",
       "title": "Cool Unit 2 — חיבור תרגומים 1",
       "exerciseType": "matching",

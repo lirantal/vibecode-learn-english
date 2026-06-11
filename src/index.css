@@ -853,6 +853,152 @@ body {
   }
 }
 
+/* ===== Pronoun writing ===== */
+.pronoun-root {
+  padding-bottom: 4px;
+}
+
+.pronoun-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pronoun-hint {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.pronoun-list {
+  list-style: none;
+  counter-reset: pronoun;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  direction: ltr;
+}
+
+.pronoun-card {
+  counter-increment: pronoun;
+  position: relative;
+  padding: 12px 12px 10px 42px;
+  border: 1px solid var(--surface2);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.pronoun-card::before {
+  content: counter(pronoun) ".";
+  position: absolute;
+  left: 14px;
+  top: 20px;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.pronoun-question {
+  margin: 0;
+}
+
+.pronoun-sentence {
+  margin: 0;
+  direction: ltr;
+  text-align: left;
+  color: var(--text);
+  font-size: clamp(0.98rem, 4.3vw, 1.18rem);
+  font-weight: 650;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.pronoun-target {
+  color: #fff;
+  font-weight: 900;
+  border-bottom: 2px solid var(--primary);
+}
+
+.pronoun-answer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  direction: ltr;
+}
+
+.pronoun-input {
+  min-width: 0;
+  min-height: 46px;
+  flex: 1;
+  padding: 0 12px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  border-radius: 12px;
+  background: #0f172a;
+  color: var(--text);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-align: left;
+  direction: ltr;
+}
+
+.pronoun-input:focus {
+  outline: 3px solid rgba(56, 189, 248, 0.35);
+  outline-offset: 2px;
+  border-color: var(--primary);
+}
+
+.pronoun-input--correct {
+  border-color: var(--correct);
+  background: rgba(34, 197, 94, 0.14);
+  color: var(--success);
+}
+
+.pronoun-input--wrong {
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.14);
+}
+
+.pronoun-submit {
+  min-height: 46px;
+  padding-inline: 14px;
+  white-space: nowrap;
+}
+
+.pronoun-feedback {
+  min-height: 1.25em;
+  margin: 6px 0 0;
+  direction: rtl;
+  text-align: right;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.pronoun-feedback--correct {
+  color: var(--success);
+}
+
+.pronoun-feedback--wrong {
+  color: var(--danger);
+}
+
+@media (max-width: 360px) {
+  .pronoun-card {
+    padding: 10px 10px 8px 36px;
+  }
+
+  .pronoun-card::before {
+    left: 12px;
+  }
+
+  .pronoun-answer-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 /* ===== Story cloze ===== */
 .story-root {
   padding-bottom: 4px;

@@ -12,6 +12,7 @@ import wordGroupsData from "./data/wordGroups.json";
 import FlashcardSession from "./components/FlashcardSession";
 import GrammarChoiceSession from "./components/GrammarChoiceSession";
 import MatchingSession from "./components/MatchingSession";
+import PronounWritingSession from "./components/PronounWritingSession";
 import SpellingSession from "./components/SpellingSession";
 import StoryClozeSession from "./components/StoryClozeSession";
 import { exerciseTotalForMode } from "./lib/score";
@@ -20,6 +21,7 @@ import type {
   EnglishRoute,
   GrammarChoiceGroup,
   MatchingGroup,
+  PronounWritingGroup,
   StoryClozeGroup,
   WordGroup,
   WordListGroup,
@@ -51,6 +53,7 @@ const modeLabels: Record<string, string> = {
   spelling: "איות",
   matching: "חיבור תרגומים",
   grammarChoice: "דקדוק",
+  pronounWriting: "כינויי גוף",
   storyCloze: "סיפור והשלמה",
 };
 
@@ -79,6 +82,10 @@ function isGrammarChoiceGroup(group: WordGroup): group is GrammarChoiceGroup {
   return group.exerciseType === "grammarChoice";
 }
 
+function isPronounWritingGroup(group: WordGroup): group is PronounWritingGroup {
+  return group.exerciseType === "pronounWriting";
+}
+
 function isStoryClozeGroup(group: WordGroup): group is StoryClozeGroup {
   return group.exerciseType === "storyCloze";
 }
@@ -95,6 +102,7 @@ function isEnglishRoute(route: ModuleRoute | undefined): route is EnglishRoute {
     route.name !== "spelling" &&
     route.name !== "matching" &&
     route.name !== "grammarChoice" &&
+    route.name !== "pronounWriting" &&
     route.name !== "storyCloze"
   ) {
     return false;
@@ -110,6 +118,10 @@ function navigateToEnglishRoute(navigate: Navigate, route: EnglishRoute): void {
 function groupMeta(group: WordGroup): string {
   if (isGrammarChoiceGroup(group)) {
     return `${exerciseTotalForMode(group, "grammarChoice")} משפטים · דקדוק`;
+  }
+
+  if (isPronounWritingGroup(group)) {
+    return `${exerciseTotalForMode(group, "pronounWriting")} משפטים · כינויי גוף`;
   }
 
   if (isStoryClozeGroup(group)) {
@@ -162,6 +174,17 @@ function activityBadgesForGroup(
     ];
   }
 
+  if (isPronounWritingGroup(group)) {
+    return [
+      {
+        mode: "pronounWriting",
+        label: "כינויי גוף",
+        total: exerciseTotalForMode(group, "pronounWriting"),
+        stats: progress?.pronounWriting,
+      },
+    ];
+  }
+
   return [
     {
       mode: "storyCloze",
@@ -179,6 +202,10 @@ function routeForGroup(group: WordGroup): EnglishRoute {
 
   if (isGrammarChoiceGroup(group)) {
     return { name: "grammarChoice", groupId: group.id };
+  }
+
+  if (isPronounWritingGroup(group)) {
+    return { name: "pronounWriting", groupId: group.id };
   }
 
   if (isStoryClozeGroup(group)) {
@@ -291,6 +318,22 @@ function renderRoute({
     return (
       <GrammarChoiceSession
         key={`gc-${selectedGroup.id}-${sessionNonce}`}
+        group={selectedGroup}
+        onRepeatSame={onRepeatSame}
+        onChangeGroup={goModuleHome}
+        onHome={goModuleHome}
+      />
+    );
+  }
+
+  if (
+    route.name === "pronounWriting" &&
+    selectedGroup &&
+    isPronounWritingGroup(selectedGroup)
+  ) {
+    return (
+      <PronounWritingSession
+        key={`pw-${selectedGroup.id}-${sessionNonce}`}
         group={selectedGroup}
         onRepeatSame={onRepeatSame}
         onChangeGroup={goModuleHome}

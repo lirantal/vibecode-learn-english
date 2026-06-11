@@ -37,8 +37,8 @@ export default function GrammarChoiceSession({
   onHome,
 }: Props) {
   const sentences = useMemo(
-    () => shuffle(group.sentences).slice(0, GRAMMAR_CHOICE_ITEMS_PER_RUN),
-    [group.sentences]
+    () => shuffle(group.sentences).slice(0, group.itemsPerRun ?? GRAMMAR_CHOICE_ITEMS_PER_RUN),
+    [group.itemsPerRun, group.sentences]
   );
   const [correctChoices, setCorrectChoices] = useState<Record<number, string>>({});
   const [wrongChoices, setWrongChoices] = useState<Record<number, string>>({});

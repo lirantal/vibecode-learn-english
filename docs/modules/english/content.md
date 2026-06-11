@@ -61,12 +61,19 @@ Use `exerciseType: "grammarChoice"` and provide `sentences` instead of `words`.
   "id": "grammar-present-simple-01",
   "title": "דקדוק — don't / doesn't",
   "exerciseType": "grammarChoice",
+  "itemsPerRun": 5,
   "sentences": [
     {
       "prefix": "I ",
       "choices": ["don't", "doesn't"],
       "suffix": " like ice cream.",
       "correctChoice": "don't"
+    },
+    {
+      "prefix": "I saw ",
+      "choices": ["a", "an", "the"],
+      "suffix": " elephant at the zoo.",
+      "correctChoice": "an"
     }
   ]
 }
@@ -74,10 +81,40 @@ Use `exerciseType: "grammarChoice"` and provide `sentences` instead of `words`.
 
 Rules:
 
-- Each sentence has `prefix`, two `choices`, `suffix`, and `correctChoice`.
-- Banks can contain more than 5 sentences; each run samples 5.
+- Each sentence has `prefix`, `choices`, `suffix`, and `correctChoice`.
+- `itemsPerRun` is optional; omit it to use the default of 5 sentences per run.
+- Banks can contain more sentences than `itemsPerRun`; each run samples that amount.
 - Worksheet charts can be adapted by expanding each subject/verb combination
   into a sentence item.
+
+## Pronoun Writing Groups
+
+Use `exerciseType: "pronounWriting"` for prompts where the student replaces a
+bold target noun/name with the correct pronoun.
+
+```json
+{
+  "id": "mofet-pronouns-practice-01",
+  "title": "מופת — Pronouns Practice 1",
+  "exerciseType": "pronounWriting",
+  "itemsPerRun": 10,
+  "sentences": [
+    {
+      "prefix": "",
+      "target": "John",
+      "suffix": " is the floor manager.",
+      "correctPronoun": "He"
+    }
+  ]
+}
+```
+
+Rules:
+
+- `target` is rendered in bold inside the sentence.
+- `prefix` and `suffix` are shown before and after the bold target.
+- `correctPronoun` is compared case-insensitively against the typed answer.
+- `itemsPerRun` is optional; omit it to use the default of 10 prompts per run.
 
 ## Story Cloze Groups
 
